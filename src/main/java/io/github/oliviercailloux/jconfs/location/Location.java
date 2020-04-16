@@ -9,12 +9,23 @@ import java.util.ArrayList;
 
 public class Location {
 	
+	/**
+     * 
+     * @param citydDep string of format
+     * @param cityArr string of format
+     * @param longitudeDep double format which represent longitude of cityDep
+     * @param latitudeDep double format which represent latitude of cityDep
+     * @param longitudeArr double format which represent longitude of cityArr
+     * @param latitudeArr double format which represent latitude of cityArr
+     * 
+     */
+	
 	double longitudeDep;
 	double latitudeDep;
 	double longitudeArr;
 	double latitudeArr;
-	String villeDep;
-	String villeArr;
+	String cityDep;
+	String cityArr;
 	
 	public static Location given() {
 		return new Location();
@@ -25,10 +36,59 @@ public class Location {
 		this.latitudeDep=0.0;
 		this.longitudeArr=0.0;
 		this.latitudeArr=0.0;
-		this.villeArr=null;
-		this.villeDep=null;
+		this.cityArr=null;
+		this.cityDep=null;
 	}
 	
+	
+	public double getLongitudeDep() {
+		return longitudeDep;
+	}
+
+	public void setLongitudeDep(double longitudeDep) {
+		this.longitudeDep = longitudeDep;
+	}
+
+	public double getLatitudeDep() {
+		return latitudeDep;
+	}
+
+	public void setLatitudeDep(double latitudeDep) {
+		this.latitudeDep = latitudeDep;
+	}
+
+	public double getLongitudeArr() {
+		return longitudeArr;
+	}
+
+	public void setLongitudeArr(double longitudeArr) {
+		this.longitudeArr = longitudeArr;
+	}
+
+	public double getLatitudeArr() {
+		return latitudeArr;
+	}
+
+	public void setLatitudeArr(double latitudeArr) {
+		this.latitudeArr = latitudeArr;
+	}
+
+	public String getCityDep() {
+		return cityDep;
+	}
+
+	public void setCityDep(String cityDep) {
+		this.cityDep = cityDep;
+	}
+
+	public String getCityArr() {
+		return cityArr;
+	}
+
+	public void setCityArr(String cityArr) {
+		this.cityArr = cityArr;
+	}
+
 	private void readCoordinateFileByCityName(Path path, String CityDep,String CityArr) throws IOException {
 		ArrayList<String>coordonnee = new ArrayList<String>();
 		try (BufferedReader is = Files.newBufferedReader(path)) {
@@ -41,7 +101,6 @@ public class Location {
 				for(int i = 0 ; i < orderedArray.length ; i++) {
 					coordonnee.add(orderedArray[i]);
 				}
-				System.out.println(read);
 			}
 		}
 		int cpt=0;
@@ -65,12 +124,15 @@ public class Location {
 	}
 	
 	
+	
+	
 	public static void main(String[] args) throws IOException {
 		Location a = Location.given();
 		Path path =Path.of("/Users/floryan/Documents/city.txt");
-		String CityDep = "Paris";
-		String CityArr = "Marseille";
-		a.readCoordinateFileByCityName(path,CityDep , CityArr);
+		Location P_M = given();
+		P_M.setCityArr("Marseille");
+		P_M.setCityDep("Paris");
+		a.readCoordinateFileByCityName(path,P_M.cityDep , P_M.cityArr);
 		System.out.println("Coordonnées de la ville de depart "+a.latitudeDep+ " "+a.longitudeDep);
 		System.out.println("Coordonnées de la ville d'arrivé "+a.latitudeArr+ " "+a.longitudeArr);
 	}

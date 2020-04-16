@@ -24,23 +24,25 @@ import com.locationiq.client.model.*;
 
 
 public class Direction {
-          private String depart ; 
-          private  String arrivee;
-          BigDecimal duree;
-          BigDecimal distance;
+          private 	String depart ; 
+          private  	String arrivee;
+          private 	BigDecimal duree;
+          private 	BigDecimal distance;
           /**
            * 
            * @param dep string of format longitude,latitude example "2.287592,48.862725"
            * @param arriv string of format longitude,latitude example "2.3488,48.85341
+           * 
            */
-          private Direction(String dep, String arriv) {
-        	  depart = dep;
-        	  arrivee = arriv;
-        	  duree = distance = BigDecimal.ZERO ;
-          }
           
           public static Direction given(String dep, String arriv) {
         	  return new Direction(dep,arriv);
+          }
+          
+          private Direction(String dep, String arriv) {
+        	  this.depart = dep;
+        	  this.arrivee = arriv;
+        	  this.duree = distance = BigDecimal.ZERO ;
           }
           
           public BigDecimal getDuree() {
@@ -50,35 +52,52 @@ public class Direction {
         	  return distance;
           }
           
+          public void setDuree(BigDecimal duree) {
+        	  this.duree = duree;
+          }
           
+          public void setDepart(String dep) {
+        	  this.depart=dep;
+          }
+          
+          public void setArrivee(String arr) {
+        	  this.arrivee=arr;
+          }
+          
+          public void setDistance(BigDecimal dist) {
+        	  this.distance=dist;
+          }
+          
+          public ApiClient connexion() throws ApiException {
+        	  ApiClient defaultClient = Configuration.getDefaultApiClient();
+        	  defaultClient.setBasePath("https://eu1.locationiq.com/v1");
+        	  ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
+        	  key.setApiKey("d4b9a23eaef07d");
+        	  return defaultClient;
+          }
+         
           public void getDirection() throws ApiException {
         	  
-        	  ApiClient defaultClient = Configuration.getDefaultApiClient();
-        	    defaultClient.setBasePath("https://eu1.locationiq.com/v1");
+        	  ApiClient defaultClient = this.connexion();
 
-        	    // Configure API key authorization: key
-        	    ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
-        	    key.setApiKey("d4b9a23eaef07d");
-
-        	    DirectionsApi api = new DirectionsApi(defaultClient);
+        	  DirectionsApi api = new DirectionsApi(defaultClient);
         	  /**
         	   * the format of the coordinate must be a String of { longitude,latitude; longitude,latitude}
         	   */
-        	   DirectionsDirections response = api.directions(depart+";"+arrivee, null, null, null, null, null, null, null, null, null, null, null);
-        	     List routes = response.getRoutes();
-        	     Iterator i = routes.iterator();
-        	     while(i.hasNext()){
-        	    	 DirectionsDirectionsRoutes dr = (DirectionsDirectionsRoutes) i.next();
-        	    	 distance = distance.add( dr.getDistance());
-        	    	 duree = duree.add( dr.getDuration());
-        	     }
-          }
+        	  DirectionsDirections response = api.directions(depart+";"+arrivee, null, null, null, null, null, null, null, null, null, null, null);
+        	  List routes = response.getRoutes();
+        	  Iterator i = routes.iterator();
+        	  while(i.hasNext()){
+       		  DirectionsDirectionsRoutes dr = (DirectionsDirectionsRoutes) i.next();
+       		  distance = distance.add( dr.getDistance());
+       		  this.duree=this.duree.add( dr.getDuration());
+        	  }
+         }
           
          public static void main(String argv[]) throws ApiException {
         	 Direction d = given("2.287592,48.862725","2.3488,48.85341");// 13 Rue Cloche Percé, 75004 Paris et cadéro et du 11 Novembre, 75016 Paris
         	 d.getDirection();
-        	 System.out.println(d.distance+" metres et "+d.duree+ " seconds");
-        	 
+        	 System.out.println(d.distance+" metres et "+d.duree+ " seconds");        	 
          } 
          
 }
