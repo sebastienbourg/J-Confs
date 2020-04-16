@@ -71,14 +71,29 @@ public class Translation {
   		  this.adressInformations.add(i.next().toString());
   	  }
     }
+	
+	public void transformationAdressInformation() {
+		ArrayList<String> tmp = new ArrayList<String>();
+		for(int i = 0; i<this.adressInformations.size(); i++) {
+			String contenu = this.adressInformations.get(i);
+			String hash = contenu.substring(1, contenu.length()-1);
+			this.adressInformations.set(i, hash);
+			System.out.println(this.adressInformations.get(i));
+		}
+		
+		for(int i=0;i<this.adressInformations.size();i++) {
+			String [] spliting = this.adressInformations.get(i).split(",");
+			String splitingsplit[spliting.length]
+			for(int j = 0; j<spliting.length;j++) {
+				String
+			}
+		}
+	}
 
 	public static void main(String[] args) throws ApiException {
 		Translation t = given();
 		t.TransalteAdresse("Université paris dauphine");
-		Iterator i = t.getAdressInformations().iterator();
-		while(i.hasNext()) {
-			System.out.println(i.next());
-		}
+		t.transformationAdressInformation();
 		
 	}
 
