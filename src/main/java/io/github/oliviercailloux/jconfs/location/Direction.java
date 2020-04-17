@@ -27,11 +27,13 @@ public class Direction {
           private 	String depart ; 
           private  	String arrivee;
           private 	BigDecimal duree;
-          private 	BigDecimal distance;
+          private 	BigDecimal distance; 
+          private   String  steps;
           /**
            * 
            * @param dep string of format longitude,latitude example "2.287592,48.862725"
            * @param arriv string of format longitude,latitude example "2.3488,48.85341
+           * steps is a string that contains all steps to go on our destination 
            * 
            */
           
@@ -42,7 +44,8 @@ public class Direction {
           private Direction(String dep, String arriv) {
         	  this.depart = dep;
         	  this.arrivee = arriv;
-        	  this.duree = distance = BigDecimal.ZERO ;
+        	  this.duree = distance = BigDecimal.ZERO ; 
+        	  this.steps="";
           }
           
           public BigDecimal getDuree() {
@@ -68,11 +71,44 @@ public class Direction {
         	  this.distance=dist;
           }
           
+          public String getSteps() {
+        	  return this.steps;
+          }
+          
+          private String indentedStringOnIntersect(String o) {
+        	    if (o == null) {
+        	      return "null";
+        	    }
+        	    return o.replaceAll("intersections=", "\n intersections= \n");
+        	  }
+          
+          private String indentedStringGeometry(String o) {
+      	    if (o == null) {
+      	      return "null";
+      	    }
+      	    return o.replaceAll("geometry=[^,]++,", "");
+      	  }
+          
+          private String indentedStringOut(String o) {
+        	    if (o == null) {
+        	      return "null";
+        	    }
+        	    return o.replaceAll("out=", "\n out=");
+          }
+        	  
+          /**
+           * this method create an ApiClient and connect it to to the API with our key
+           * @return ApiClient
+           * @throws ApiException
+           */
+          
+          
+          
           public ApiClient connexion() throws ApiException {
         	  ApiClient defaultClient = Configuration.getDefaultApiClient();
         	  defaultClient.setBasePath("https://eu1.locationiq.com/v1");
         	  ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
-        	  key.setApiKey("d4b9a23eaef07d");
+        	  key.setApiKey("d4b9a23eaef07d");  // here our key
         	  return defaultClient;
           }
          
@@ -84,20 +120,25 @@ public class Direction {
         	  /**
         	   * the format of the coordinate must be a String of { longitude,latitude; longitude,latitude}
         	   */
-        	  DirectionsDirections response = api.directions(depart+";"+arrivee, null, null, null, null, null, null, null, null, null, null, null);
+        	  DirectionsDirections response = api.directions(depart+";"+arrivee, null, null, null, null, null, null, "true", null, null, "simplified", null);
         	  List routes = response.getRoutes();
         	  Iterator i = routes.iterator();
         	  while(i.hasNext()){
        		  DirectionsDirectionsRoutes dr = (DirectionsDirectionsRoutes) i.next();
        		  distance = distance.add( dr.getDistance());
        		  this.duree=this.duree.add( dr.getDuration());
+       		  this.steps = this.steps + dr.toString();
         	  }
+        	  this.steps=indentedStringOnIntersect(this.steps);
+        	  this.steps=indentedStringGeometry(this.steps);
+        	  this.steps=indentedStringOut(this.steps);
          }
           
          public static void main(String argv[]) throws ApiException {
         	 Direction d = given("2.287592,48.862725","2.3488,48.85341");// 13 Rue Cloche Percé, 75004 Paris et cadéro et du 11 Novembre, 75016 Paris
         	 d.getDirection();
-        	 System.out.println(d.distance+" metres et "+d.duree+ " seconds");        	 
+        	 System.out.println(d.distance+" metres et "+d.duree+ " seconds ");  
+        	 System.out.println(d.getSteps());
          } 
          
 }

@@ -232,7 +232,7 @@ public class DirectionsDirectionsRoutes {
     sb.append("class DirectionsDirectionsRoutes {\n");
     sb.append("    legs: ").append(toIndentedString(legs)).append("\n");
     sb.append("    weightName: ").append(toIndentedString(weightName)).append("\n");
-    sb.append("    geometry: ").append(toIndentedString(geometry)).append("\n");
+   // sb.append("    geometry: ").append(toIndentedString(geometry)).append("\n");
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
     sb.append("    distance: ").append(toIndentedString(distance)).append("\n");
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
