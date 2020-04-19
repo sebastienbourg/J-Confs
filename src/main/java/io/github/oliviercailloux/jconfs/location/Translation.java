@@ -92,7 +92,7 @@ public class Translation {
 	 * @return adressInformations
 	 */
 	
-	public List<String> getAdressInformations() {
+	public ArrayList<String> getAdressInformations() {
 		return adressInformations;
 	}
 	
@@ -207,7 +207,8 @@ public class Translation {
 	public static void main(String[] args) throws ApiException {
 		Translation t = given();
 		t.TransalteAdresse("Université paris dauphine");
-		t.selectionAddressInformation();
+		boolean test = t.addressComparison(t.getAdressInformations());
+		
 		
 	}
 
