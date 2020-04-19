@@ -22,13 +22,21 @@ import LocationIq.Configuration;
 import LocationIq.auth.*;
 import com.locationiq.client.model.*;
 
-
+/**
+ * 
+ * @author Anis HAMOUNI
+ * this class allows to calculate the distance and the duration between two places defined by (longitude, latitude) 
+ * and also the steps to go to the destination. 
+ *  the units are meter and second, the steps are a string
+ */
 public class Direction {
           private 	String depart ; 
           private  	String arrivee;
           private 	BigDecimal duree;
           private 	BigDecimal distance; 
           private   String  steps;
+          
+          
           /**
            * 
            * @param dep string of format longitude,latitude example "2.287592,48.862725"
@@ -59,6 +67,18 @@ public class Direction {
         	  this.duree = duree;
           }
           
+          public void setDistance(BigDecimal dist) {
+        	  this.distance=dist;
+          }
+          
+          public String getDepart() {
+        	  return this.depart;
+          }
+          
+          public String getArrivee() {
+        	  return this.arrivee;
+          }
+          
           public void setDepart(String dep) {
         	  this.depart=dep;
           }
@@ -66,15 +86,17 @@ public class Direction {
           public void setArrivee(String arr) {
         	  this.arrivee=arr;
           }
-          
-          public void setDistance(BigDecimal dist) {
-        	  this.distance=dist;
-          }
-          
+                 
           public String getSteps() {
         	  return this.steps;
           }
           
+          /**
+           * 
+           * @param o String 
+           * this function takes a string and returns it with a line break at each "intersections" word.
+           * it used when we calculate the steps 
+           */
           private String indentedStringOnIntersect(String o) {
         	    if (o == null) {
         	      return "null";
@@ -82,13 +104,22 @@ public class Direction {
         	    return o.replaceAll("intersections=", "\n intersections= \n");
         	  }
           
+          /**
+           * 
+           * @param o String
+           * this function removes the geometry information in the steps because it is useless
+           */
           private String indentedStringGeometry(String o) {
       	    if (o == null) {
       	      return "null";
       	    }
       	    return o.replaceAll("geometry=[^,]++,", "");
       	  }
-          
+          /**
+           * 
+           * @param o
+           * @this function takes a string and returns it with a line break at each "out" word.
+           */
           private String indentedStringOut(String o) {
         	    if (o == null) {
         	      return "null";
@@ -96,13 +127,12 @@ public class Direction {
         	    return o.replaceAll("out=", "\n out=");
           }
         	  
+          
           /**
            * this method create an ApiClient and connect it to to the API with our key
            * @return ApiClient
            * @throws ApiException
            */
-          
-          
           
           public ApiClient connexion() throws ApiException {
         	  ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -111,7 +141,11 @@ public class Direction {
         	  key.setApiKey("d4b9a23eaef07d");  // here our key
         	  return defaultClient;
           }
-         
+         /**
+          * this function calculates the time and distance as well as the steps
+          *  to move between the two attributes of the class which are coordinates of localisation
+          * @throws ApiException
+          */
           public void getDirection() throws ApiException {
         	  
         	  ApiClient defaultClient = this.connexion();
@@ -133,12 +167,5 @@ public class Direction {
         	  this.steps=indentedStringGeometry(this.steps);
         	  this.steps=indentedStringOut(this.steps);
          }
-          
-         public static void main(String argv[]) throws ApiException {
-        	 Direction d = given("2.287592,48.862725","2.3488,48.85341");// 13 Rue Cloche Percé, 75004 Paris et cadéro et du 11 Novembre, 75016 Paris
-        	 d.getDirection();
-        	 System.out.println(d.distance+" metres et "+d.duree+ " seconds ");  
-        	 System.out.println(d.getSteps());
-         } 
          
 }
