@@ -28,8 +28,9 @@ public class Translation {
 	private String latitude;
 	private String longitude;
 	private ArrayList <String> adressInformations;
+	private ArrayList <String> adressFound;
 	
-	
+
 	/**
 	 * 
 	 * Factory method which creates a Translation instance
@@ -106,6 +107,24 @@ public class Translation {
 	}
 	
 	/**
+	 * This method return all adress found after a resercher adress
+	 * @return adressFound
+	 */
+	
+	public ArrayList<String> getAdressFound() {
+		return adressFound;
+	}
+	
+	/**
+	 * Setter for adressFound
+	 * @param adressFound
+	 */
+	
+	public void setAdressFound(ArrayList<String> adressFound) {
+		this.adressFound = adressFound;
+	}
+	
+	/**
 	 * This method allows connection to LocationIQ and its database.
 	 * @return ApiClient defaultClient
 	 * @throws ApiException
@@ -150,7 +169,7 @@ public class Translation {
 	public boolean addressComparison(ArrayList <String> selection) {
 		boolean res=false;
 		for(int i = 0 ; i< selection.size()-1;i++) {
-			if(selection.get(i).equals(selection.get(i+1)) && i!=selection.size()-1) {
+			if(selection.get(i).equals(selection.get(i+1))) {
 				res = true;
 			}
 			
@@ -200,14 +219,14 @@ public class Translation {
 			String add = this.adressInformations.get(i).substring(posDep+search.length(), posArr);
 			selection.add(add);
 		}
+		this.adressFound=selection;
 		this.displaySelectionAddress(selection);
-		
 	}
 
 	public static void main(String[] args) throws ApiException {
 		Translation t = given();
-		t.TransalteAdresse("Université paris dauphine");
-		boolean test = t.addressComparison(t.getAdressInformations());
+		t.TransalteAdresse("université paris dauphine");
+		t.selectionAddressInformation();
 		
 		
 	}

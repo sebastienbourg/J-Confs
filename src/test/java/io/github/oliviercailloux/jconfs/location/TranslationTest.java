@@ -31,7 +31,8 @@ class TranslationTest {
 	public final void treatmentAdressInformationsTest() throws LocationIq.ApiException {
 		Translation t = Translation.given();
 		t.TransalteAdresse("Université paris dauphine");
-		boolean test = t.addressComparison(t.getAdressInformations());
+		t.selectionAddressInformation();
+		boolean test = t.addressComparison(t.getAdressFound());
 		assertEquals(true,test);
 	}
 
