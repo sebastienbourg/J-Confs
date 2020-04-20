@@ -147,8 +147,10 @@ public class Translation {
 	 * @throws ApiException
 	 */
 	
-	public void TransalteAdresse(String adresse) throws ApiException{
-  	  
+	public void TransalteAdresse(String adresse) throws ApiException, IllegalArgumentException{
+  	  if(adresse=="" || adresse==null) {
+  		  throw new IllegalArgumentException("Adress error");
+  	  }
   	  ApiClient defaultClient = this.connexion();
   	  AutocompleteApi api = new AutocompleteApi(defaultClient);
   	  List tmp = api.autocomplete(adresse, 1, null, null, null, null, null, null);
@@ -223,7 +225,7 @@ public class Translation {
 		this.displaySelectionAddress(selection);
 	}
 
-	public static void main(String[] args) throws ApiException {
+	public static void main(String[] args) throws ApiException, IllegalArgumentException {
 		Translation t = given();
 		t.TransalteAdresse("université paris dauphine");
 		t.selectionAddressInformation();

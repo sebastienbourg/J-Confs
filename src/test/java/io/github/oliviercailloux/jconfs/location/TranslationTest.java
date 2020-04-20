@@ -21,14 +21,14 @@ class TranslationTest {
 	}
 	
 	@Test
-	public final void  addressInformationsTest() throws LocationIq.ApiException {
+	public final void  addressInformationsTest() throws LocationIq.ApiException, IllegalArgumentException {
 		Translation t = Translation.given();
 		t.TransalteAdresse("Université paris dauphine");
 		assertEquals(5,t.getAdressInformations().size());
 	}
 	
 	@Test
-	public final void treatmentAdressInformationsTest() throws LocationIq.ApiException {
+	public final void treatmentAdressInformationsTest() throws LocationIq.ApiException, IllegalArgumentException {
 		Translation t = Translation.given();
 		t.TransalteAdresse("Université paris dauphine");
 		t.selectionAddressInformation();
