@@ -1,13 +1,16 @@
 package io.github.oliviercailloux.jconfs.location;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import com.locationiq.client.ApiException;
+
+/**
+ * 
+ * @author Floryan
+ *
+ */
 
 class TranslationTest {
 	
@@ -49,9 +52,26 @@ class TranslationTest {
 	public final void treatmentAdressInformationsTest() throws LocationIq.ApiException, IllegalArgumentException {
 		Translation t = Translation.given();
 		t.TransalteAdresse("Université paris dauphine");
-		t.selectionAddressInformation();
+		t.addressFound();
 		boolean test = t.addressComparison(t.getAdressFound());
 		assertEquals(true,test);
+	}
+	
+	
+	/**
+	 * This method test the fact that when the user selects an address the unnecessary lines are deleted.
+	 * @throws IllegalArgumentException
+	 * @throws LocationIq.ApiException
+	 */
+	
+	@Test 
+	public final void selectionAddressProposal() throws IllegalArgumentException, LocationIq.ApiException {
+		Translation t = Translation.given();
+		t.TransalteAdresse("Université paris dauphine");
+		t.addressFound();
+		t.addressProposal();
+		assertEquals(1,t.getAdressFound().size());
+		assertEquals(1,t.getAdressInformations().size());
 	}
 
 }

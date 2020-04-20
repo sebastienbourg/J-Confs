@@ -3,6 +3,7 @@ package io.github.oliviercailloux.jconfs.location;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +28,8 @@ public class Translation {
 	
 	private String latitude;
 	private String longitude;
-	private ArrayList <String> adressInformations;
-	private ArrayList <String> adressFound;
+	private ArrayList <String> addressInformations;
+	private ArrayList <String> addressFound;
 	
 
 	/**
@@ -48,7 +49,7 @@ public class Translation {
 	private Translation() {
 		this.longitude=null;
 		this.latitude=null;
-		this.adressInformations = new ArrayList<String>();
+		this.addressInformations = new ArrayList<String>();
 	}
 	
 	
@@ -94,7 +95,7 @@ public class Translation {
 	 */
 	
 	public ArrayList<String> getAdressInformations() {
-		return adressInformations;
+		return addressInformations;
 	}
 	
 	/**
@@ -103,16 +104,16 @@ public class Translation {
 	 */
 	
 	public void setAdressInformations(ArrayList<String> adressInformations) {
-		this.adressInformations = adressInformations;
+		this.addressInformations = adressInformations;
 	}
 	
 	/**
-	 * This method return all adress found after a resercher adress
+	 * This method return all address found after a researcher address
 	 * @return adressFound
 	 */
 	
 	public ArrayList<String> getAdressFound() {
-		return adressFound;
+		return addressFound;
 	}
 	
 	/**
@@ -121,7 +122,7 @@ public class Translation {
 	 */
 	
 	public void setAdressFound(ArrayList<String> adressFound) {
-		this.adressFound = adressFound;
+		this.addressFound = adressFound;
 	}
 	
 	/**
@@ -153,10 +154,10 @@ public class Translation {
   	  }
   	  ApiClient defaultClient = this.connexion();
   	  AutocompleteApi api = new AutocompleteApi(defaultClient);
-  	  List tmp = api.autocomplete(adresse, 1, null, null, null, null, null, null);
-  	  Iterator i = tmp.iterator();
+  	  List <Object> tmp = api.autocomplete(adresse, 1, null, null, null, null, null, null);
+  	  Iterator <Object> i = tmp.iterator();
   	  while(i.hasNext()) {
-  		  this.adressInformations.add(i.next().toString());
+  		  this.addressInformations.add(i.next().toString());
   	  }
     }
 	
@@ -187,14 +188,14 @@ public class Translation {
 	 * @param selection
 	 */
 	
-	public void displaySelectionAddress(ArrayList<String>selection) {
+	public void displayFoundAddress(ArrayList<String>selection) {
 		if(!this.addressComparison(selection)) {
 			for (int i = 0; i<selection.size();i++) {
-				System.out.println(selection.get(i));
+				System.out.println(i+1 +") - "+selection.get(i));
 			}
 		}
 		else {
-			System.out.println(selection.get(0));
+			System.out.println(1 +") - "+selection.get(0));
 		}
 		
 	}
@@ -202,35 +203,61 @@ public class Translation {
 	
 	/**
 	 * This method modifies the contents of the ArrayList adressInformations to make it more readable and 
-	 * to be able to apply different methods more easily.
+	 * to be able to apply different methods more easily. It also makes it possible to retrieve all the 
+	 * addresses found by autocomplete, to store them in adressFound.
 	 * It allows the selection of the address that the user wants.
 	 */
 	
-	public void selectionAddressInformation() {
-		ArrayList<String> tmp = new ArrayList<String>();
-		for(int i = 0; i<this.adressInformations.size(); i++) {
-			String contenu = this.adressInformations.get(i);
+	public void addressFound() {
+		for(int i = 0; i<this.addressInformations.size(); i++) {
+			String contenu = this.addressInformations.get(i);
 			String hash = contenu.substring(1, contenu.length()-2);
-			this.adressInformations.set(i, hash);
+			this.addressInformations.set(i, hash);
 		}
 		ArrayList<String> selection = new ArrayList<String>();
-		for(int i = 0 ; i<this.adressInformations.size();i++) {
+		for(int i = 0 ; i<this.addressInformations.size();i++) {
 			String search = "display_address=";
-			int posDep = this.adressInformations.get(i).indexOf(search);
-			int posArr = this.adressInformations.get(i).indexOf(", address={");
-			String add = this.adressInformations.get(i).substring(posDep+search.length(), posArr);
+			int posDep = this.addressInformations.get(i).indexOf(search);
+			int posArr = this.addressInformations.get(i).indexOf(", address={");
+			String add = this.addressInformations.get(i).substring(posDep+search.length(), posArr);
 			selection.add(add);
 		}
-		this.adressFound=selection;
-		this.displaySelectionAddress(selection);
+		this.addressFound=selection;
+	}
+	
+	/**
+	 * This method display all address found by autocomplete and ask the user to select the one of his choice. 
+	 * After the user has chosen all the unnecessary addresses in the addressFound and addressInformations ArrayList are deleted.
+	 */
+	
+	public void addressProposal() {
+		this.displayFoundAddress(this.getAdressFound());
+		int numberAddress = this.selectionAddressProposal();
+		for(int i=0 ; i<this.addressInformations.size();i++) {
+			if(i!=numberAddress-1) {
+				this.addressFound.remove(i);
+				this.addressInformations.remove(i);
+				i--;
+			}
+		}
+	}
+	
+	/**
+	 * This method allows to return the choice of the user.
+	 * @return int numberAddress
+	 */
+	
+	public int selectionAddressProposal() {
+		System.out.print("Saisir le numéro associé à l'adresse de votre choix: ");
+		Scanner sc = new Scanner(System.in);
+		int numberAddress = sc.nextInt();
+		return numberAddress;
 	}
 
 	public static void main(String[] args) throws ApiException, IllegalArgumentException {
 		Translation t = given();
 		t.TransalteAdresse("université paris dauphine");
-		t.selectionAddressInformation();
-		
-		
+		t.addressFound();
+		t.addressProposal();
 	}
-
 }
