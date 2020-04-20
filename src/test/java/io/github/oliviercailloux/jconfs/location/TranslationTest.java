@@ -60,6 +60,8 @@ class TranslationTest {
 	
 	/**
 	 * This method test the fact that when the user selects an address the unnecessary lines are deleted.
+	 * For the test to work, enter 1 in the console. Because the test relates to a user response to then 
+	 * delete unnecessary addresses. There is therefore only one row in each table.
 	 * @throws IllegalArgumentException
 	 * @throws LocationIq.ApiException
 	 */
