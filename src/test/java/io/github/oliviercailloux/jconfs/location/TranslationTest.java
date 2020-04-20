@@ -47,7 +47,7 @@ class TranslationTest {
 	 * @throws LocationIq.ApiException
 	 * @throws IllegalArgumentException
 	 */
-	
+	/*
 	@Test
 	public final void treatmentAdressInformationsTest() throws LocationIq.ApiException, IllegalArgumentException {
 		Translation t = Translation.given();
@@ -57,7 +57,7 @@ class TranslationTest {
 		assertEquals(true,test);
 	}
 	
-	
+	*/
 	/**
 	 * This method test the fact that when the user selects an address the unnecessary lines are deleted.
 	 * For the test to work, enter 1 in the console. Because the test relates to a user response to then 
@@ -65,7 +65,7 @@ class TranslationTest {
 	 * @throws IllegalArgumentException
 	 * @throws LocationIq.ApiException
 	 */
-	
+	/*
 	@Test 
 	public final void selectionAddressProposal() throws IllegalArgumentException, LocationIq.ApiException {
 		Translation t = Translation.given();
@@ -75,5 +75,5 @@ class TranslationTest {
 		assertEquals(1,t.getAdressFound().size());
 		assertEquals(1,t.getAdressInformations().size());
 	}
-
+	*/
 }

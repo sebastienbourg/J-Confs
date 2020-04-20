@@ -12,20 +12,22 @@ This project is producted by 5 students :
 
 === Delivery schedule for 2020
 
-[width="80%",cols="^10,^10,^10,^30",options="header"]
-|===========================================================================================================================
-|Delivery | Deadline | Expected effort | TEAMS
+[width="80%",cols="^10,^10,^10,^10,^30,^10",options="header"]
+|===================================================================================================================================
+|Delivery |Course |Deadline | Expected effort | TEAMS | SM/PO
 
-|1|20th May, 2019 |10 h | Team 1 : Kieffer Floryan & Bourg Sébastien + Team 2 : Achria Majid & Hamouni Anis & Zouari Anis|
-
-
-
-|===========================================================================================================================
+|1|UML   |16th March, 2020 |10 h | Team 1 : Kieffer Floryan & Bourg Sébastien + Team 2 : Achria Majid & Hamouni Anis & Zouari Anis| Nobody
+|2|UML   |30th March, 2020 |10 h | Team 1 : Kieffer Floryan & Bourg Sébastien + Team 2 : Achria Majid & Hamouni Anis & Zouari Anis| Nobody
+|3|Java  |20th April, 2020 |13 h | Team 1 : Kieffer Floryan & Hamouni Anis + Team 2 : Achria Majid & Bourg Sébastien              | Zouari
 
 
 
-Delivery 1 
-~~~~~~~~~~
+|===================================================================================================================================
+
+
+
+Delivery 1 : UML
+~~~~~~~~~~~~~~~~~
 
 * *Tasks to do in the first Java iteration*
 . Use Instant in Conference. Use double instead of Doubles. Use a Builder.
@@ -35,8 +37,8 @@ Delivery 1
 
 *These tasks are independent.*
 
-Delivery 2
-~~~~~~~~~~
+Delivery 2 : UML
+~~~~~~~~~~~~~~~~~
 
 * *Tasks to do in the second Java iteration*
 . Implement the abilities to handle different online calendar (with tests JUnit).
@@ -46,3 +48,21 @@ Delivery 2
 
 
 The code is hereby published under the MIT License, with the permission of the contributors.
+
+Delivery 3 : JAVA
+~~~~~~~~~~~~~~~~~
+For the first iteration, the team has been divided in 2 parts,  one part that is in charge of LocationIQ's package (Kieffer Floryan & Hamouni Anis),  and the other part of the team is on Calendar's package (Achria Majid & Bourg Sébastien).
+
+*Tasks done* :
+
+With regard to the team in charge of the *Calendar package* : 
+
+
+- The team worked on the Calendar package to integrate a connection to a calendar hosted by various NextCloud platform hosts (example: cloudamo and wolki). We modified the "CalendarOnline" class and added another "CalendarBuilder" class. We also tested other architectures such as interfaces but we chose to start on a builder for more clarity and also because we were more comfortable with this architecture.
+
+- About the Direction class : this class is used to calculate the distance and time between two locations, as well as the path to take to get there. For the moment the locations are strings in {longitude, latitude} format, later on they will be attributes of type Location. Concerning the steps for the move, we have a function to return the necessary data for this move, the concern is that there is a lot of useless information, we have sorted it but it is not yet sufficient.
+
+With regard to the team in charge of the *LocationIQ package* : 
+
+
+- We have been working on a new Location class. To do this we imported all the source code of LocationIQ into our code. We then created the Location package specific to our project and developed the following classes: Location (Floryan Kieffer and Anis Hamouni), Direction (Anis Hamouni) and Translation (Floryan Kieffer). The Location class should allow to retrieve the information in a file (offline mode). This class may be removed later we have not yet fully implemented it. The Translation class should make it possible to return several addresses based on an imprecise information and to propose them to the user so that he can select one among the proposed choices. Following this response, a process of deleting unnecessary addresses is carried out. Then we will have in this class all the necessary information about the address selected by the user.
