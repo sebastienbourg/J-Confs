@@ -205,7 +205,8 @@ public class Translation {
 	 * This method modifies the contents of the ArrayList adressInformations to make it more readable and 
 	 * to be able to apply different methods more easily. It also makes it possible to retrieve all the 
 	 * addresses found by autocomplete, to store them in adressFound.
-	 * It allows the selection of the address that the user wants.
+	 * It allows the selection of the address that the user wants using a Scanner. 
+	 * To test this function, enter the number 1 in the console.
 	 */
 	
 	public void addressFound() {
