@@ -113,7 +113,7 @@ public class Direction {
       	    if (o == null) {
       	      return "null";
       	    }
-      	    return o.replaceAll("geometry=[^,]++,", "");
+      	    return o.replaceAll("geometry=[^,]++,|out=[^,]++,|in=[^,]++,|entry=\\[[^\\]]++\\],|bearings=\\[[^\\]]++\\]}?\\]?,", "");
       	  }
           /**
            * 
