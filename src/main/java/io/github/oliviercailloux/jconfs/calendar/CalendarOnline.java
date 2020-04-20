@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.rmi.server.UID;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -15,11 +18,15 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Created;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.DtEnd;
+import net.fortuna.ical4j.model.property.DtStamp;
 import net.fortuna.ical4j.model.property.DtStart;
+import net.fortuna.ical4j.model.property.LastModified;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Name;
+import net.fortuna.ical4j.model.property.Sequence;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Url;
@@ -56,42 +63,23 @@ import io.github.oliviercailloux.jconfs.conference.ConferenceReader;
 import io.github.oliviercailloux.jconfs.conference.InvalidConferenceFormatException;
 
 /**
- * @author nikola 
- * This class permits to access to online conferences from
- *         https://fruux.com
+ * @author machria & sbourg
+ * This class is the management of calendar online object. It makes you able to add, edit and delete conference.
  */
 public class CalendarOnline {
-	final private static String userNameFruux = "b3297431258";
-	final private static String passwordFruux = "jizbr5fuj9gi";
-	final private static String calendarIDFruux = "6e8c6372-eba5-43da-9eed-8e5413559c99";
-	private static CalendarOnline instanceCalendarOnline;
-	private CalDAVCollection collectionCalendarsOnline;
-	private static CloseableHttpClient httpclient;
+	
+	private CalDavCalendarGeneric connector;
 
-	private CalendarOnline() {
-		HttpHost hostTarget;
-		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		credsProvider.setCredentials(new AuthScope("dav.fruux.com", 443),
-				new UsernamePasswordCredentials(userNameFruux, passwordFruux));
-		httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
-		hostTarget = new HttpHost("dav.fruux.com", 443, "https");
-
-		collectionCalendarsOnline = new CalDAVCollection("/calendars/" + userNameFruux + "/" + calendarIDFruux,
-				hostTarget, new CalDAV4JMethodFactory(), CalDAVConstants.PROC_ID_DEFAULT);
+	public CalendarOnline(CalDavCalendarGeneric connector) {
+		this.connector=connector;
 	}
 
-	public static CalendarOnline getInstance() {
-		if (instanceCalendarOnline == null) {
-			instanceCalendarOnline = new CalendarOnline();
-		}
-		return instanceCalendarOnline;
-	}
 
 	/**
 	 * This method has been partially taken from :
 	 * https://github.com/dedeibel/list-events-caldav4j-example/blob/master/src/test/java/benjaminpeter/name/ListCalendarTest.java
 	 * It allows you to retrieve events from calendars hosted on a fruux account
-	 * 
+	 * Maybe add a try catch in line 97 because if an event don't have an url in vEvent it block the program. 
 	 * @return
 	 * @throws CalDAV4JException
 	 * @throws InvalidConferenceFormatException
@@ -99,16 +87,16 @@ public class CalendarOnline {
 	public Set<Conference> getOnlineConferences() throws CalDAV4JException, InvalidConferenceFormatException {
 		GenerateQuery searchQuery = new GenerateQuery();
 		CalendarQuery calendarQuery = searchQuery.generate();
-		List<Calendar> calendarsResult = collectionCalendarsOnline.queryCalendars(httpclient, calendarQuery);
 		Set<Conference> listConferencesUser = new LinkedHashSet<>();
-		for (Calendar calendar : calendarsResult) {
-			ComponentList<VEvent> componentList = calendar.getComponents(Component.VEVENT);
-			Iterator<VEvent> eventIterator = componentList.iterator();
-			while (eventIterator.hasNext()) {
-				VEvent vEventFound = eventIterator.next();
-				listConferencesUser.add(ConferenceReader.createConference(vEventFound));
+		List<Calendar> calendarsResult = this.connector.collectionCalendarsOnline.queryCalendars(this.connector.httpclient, calendarQuery);
+			for (Calendar calendar : calendarsResult) {
+				ComponentList<VEvent> componentList = calendar.getComponents(Component.VEVENT);
+				Iterator<VEvent> eventIterator = componentList.iterator();
+				while (eventIterator.hasNext()) {
+					VEvent vEventFound = eventIterator.next();
+					listConferencesUser.add(ConferenceReader.createConference(vEventFound));
+				}
 			}
-		}
 		return listConferencesUser;
 	}
 
@@ -123,10 +111,11 @@ public class CalendarOnline {
 	public void editConferenceOnline(Conference conferenceEdited)
 			throws ParseException, CalDAV4JException, URISyntaxException {
 		VEvent vEventConferenceModified = conferenceToVEvent(conferenceEdited);
-		collectionCalendarsOnline.updateMasterEvent(httpclient, vEventConferenceModified, null);
+		this.connector.collectionCalendarsOnline.updateMasterEvent(this.connector.httpclient, vEventConferenceModified, null);
 	}
 
 	/**
+	 * Different behavior depending on the calendar online
 	 * @param conferenceEdited : the conference you want to convert
 	 * @return the VEvent corresponding to your Conference
 	 * @throws URISyntaxException
@@ -135,23 +124,44 @@ public class CalendarOnline {
 	public VEvent conferenceToVEvent(Conference conferenceEdited) throws URISyntaxException, ParseException {
 		VEvent vEventConference;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		Property url = new Url(conferenceEdited.getUrl().toURI());
+		Property urlz = new Url(conferenceEdited.getUrl().toURI());
 		Property location = new Location(conferenceEdited.getCity() + "," + conferenceEdited.getCountry());
 		Property description = new Description("Fee:" + conferenceEdited.getFeeRegistration());
 		Property name = new Summary(conferenceEdited.getTitle());
 		Property startDate = new DtStart(new Date(conferenceEdited.getStartDate().format(formatter)));
 		Property endDate = new DtEnd(new Date(conferenceEdited.getEndDate().format(formatter)));
-		Property uid = new Uid(conferenceEdited.getUid());
+		Property uid = new Uid(conferenceEdited.getUid().toLowerCase());
 		PropertyList<Property> propertyListVevent = new PropertyList<>();
-		propertyListVevent.add(url);
-		propertyListVevent.add(name);
-		propertyListVevent.add(description);
-		propertyListVevent.add(location);
-		propertyListVevent.add(startDate);
-		propertyListVevent.add(endDate);
-		propertyListVevent.add(uid);
+		Property sequence = new Sequence(2);
+		Property created = new Created();
+		Property dtstamp = new DtStamp();
+		Property lastModified = new LastModified();
+		if(this.connector.url.contains("fruux")) {
+			propertyListVevent.add(urlz);
+			propertyListVevent.add(name);
+			propertyListVevent.add(description);
+			propertyListVevent.add(location);
+			propertyListVevent.add(startDate);
+			propertyListVevent.add(endDate);
+			propertyListVevent.add(uid);
+		}else {
+			propertyListVevent.add(created);
+			propertyListVevent.add(dtstamp);
+			propertyListVevent.add(lastModified);
+			propertyListVevent.add(sequence);
+			propertyListVevent.add(uid);
+			propertyListVevent.add(startDate);
+			propertyListVevent.add(endDate);
+			propertyListVevent.add(name);
+			propertyListVevent.add(location);
+			propertyListVevent.add(description);
+			propertyListVevent.add(urlz);
+
+		}
 		vEventConference = new VEvent(propertyListVevent);
+
 		return vEventConference;
+
 	}
 
 	/**
@@ -167,7 +177,7 @@ public class CalendarOnline {
 		GenerateQuery searchQuery = new GenerateQuery();
 		searchQuery.setFilter("VEVENT : UID==" + uid);
 		CalendarQuery calendarQuery = searchQuery.generate();
-		List<Calendar> calendarsResult = collectionCalendarsOnline.queryCalendars(httpclient, calendarQuery);
+		List<Calendar> calendarsResult = this.connector.collectionCalendarsOnline.queryCalendars(this.connector.httpclient, calendarQuery);
 		for (Calendar calendar : calendarsResult) {
 			vEventConferenceFound = ICalendarUtils.getFirstEvent(calendar);
 		}
@@ -187,19 +197,19 @@ public class CalendarOnline {
 			throws CalDAV4JException, URISyntaxException, ParseException {
 		VEvent ve;
 		ve = conferenceToVEvent(conferenceToPush);
-		Objects.requireNonNull(ve);
-		Objects.requireNonNull(ve.getUid());
-		collectionCalendarsOnline.add(httpclient, ve, null);
+		System.out.println(ve);
+		Objects.requireNonNull(ve); Objects.requireNonNull(ve.getUid());
+		 
+		this.connector.collectionCalendarsOnline.add(this.connector.httpclient, ve, null);
 	}
 
 	/**
-	 * @param uid uid of the event to delete
+	 * @param uid of the event to delete
 	 * @throws CalDAV4JException
 	 */
 	public void deleteOnlineConference(String uid) throws CalDAV4JException {
 		Objects.requireNonNull(uid);
-		collectionCalendarsOnline.delete(httpclient,
-				collectionCalendarsOnline.getCalendarCollectionRoot() + "/" + uid + ".ics");
+		this.connector.collectionCalendarsOnline.delete(this.connector.httpclient,
+				this.connector.collectionCalendarsOnline.getCalendarCollectionRoot() + uid + ".ics");
 	}
-
 }

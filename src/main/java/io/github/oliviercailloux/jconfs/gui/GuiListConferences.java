@@ -30,8 +30,7 @@ import org.slf4j.LoggerFactory;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.util.RandomUidGenerator;
 
-import com.google.common.primitives.Doubles;
-
+import com.google.common.primitives.Doubles;import io.github.oliviercailloux.jconfs.calendar.CalDavCalendarGeneric;
 import io.github.oliviercailloux.jconfs.calendar.CalendarOnline;
 import io.github.oliviercailloux.jconfs.conference.Conference;
 import io.github.oliviercailloux.jconfs.conference.InvalidConferenceFormatException;
@@ -124,7 +123,7 @@ public class GuiListConferences {
 	 */
 	public void getConferences() throws InvalidConferenceFormatException {
 		try {
-			listConferencesUser = new ArrayList<>(CalendarOnline.getInstance().getOnlineConferences());
+			listConferencesUser = new ArrayList<>(new CalendarOnline(new CalDavCalendarGeneric("dav.fruux.com", "b3297431258", "jizbr5fuj9gi", "6e8c6372-eba5-43da-9eed-8e5413559c99", 443,"")).getOnlineConferences());
 		} catch (CalDAV4JException e) {
 			throw new IllegalStateException(e);
 		}
@@ -365,7 +364,7 @@ public class GuiListConferences {
 	 * Call the method from CalendarOnline to push in fruux the new conference
 	 */
 	public void addConference() {
-		CalendarOnline instanceCalendarOnline = CalendarOnline.getInstance();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("dav.fruux.com", "b3297431258", "jizbr5fuj9gi", "6e8c6372-eba5-43da-9eed-8e5413559c99", 443,""));
 		LocalDate localDateStart = LocalDate.of(dateStart.getYear(), dateStart.getMonth() + 1, dateStart.getDay());
 		LocalDate localDateEnd = LocalDate.of(dateEnd.getYear(), dateEnd.getMonth() + 1, dateEnd.getDay());
 		URL urlConference;
@@ -389,7 +388,7 @@ public class GuiListConferences {
 	 * Call the method from CalendarOnline to delete in fruux a conference
 	 */
 	public void removeConference() {
-		CalendarOnline instanceCalendarOnline = CalendarOnline.getInstance();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("dav.fruux.com", "b3297431258", "jizbr5fuj9gi", "6e8c6372-eba5-43da-9eed-8e5413559c99", 443,""));
 		String uidDelete = listConferencesUser.get(listConferences.getSelectionIndex()).getUid();
 		try {
 			instanceCalendarOnline.deleteOnlineConference(uidDelete);

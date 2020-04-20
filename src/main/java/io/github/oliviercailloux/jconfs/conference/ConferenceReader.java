@@ -78,12 +78,13 @@ public class ConferenceReader {
 				feeRegistration = Double.parseDouble(ele.substring(ele.indexOf(":") + 1));
 			}
 		}
-		String uid = confCompo.getProperty("UID").getValue();
+		
 		String title = confCompo.getProperty("SUMMARY").getValue();
 		String city = location[0];
 		String country = location[1];
 		String stringDTSTART = convertDate(confCompo.getProperty("DTSTART").getValue());
 		String stringDTEND = convertDate(confCompo.getProperty("DTEND").getValue());
+		String uid = confCompo.getProperty("UID").getValue();
 		LocalDate start = null;
 		LocalDate end = null;
 
