@@ -1,10 +1,11 @@
 package io.github.oliviercailloux.jconfs.location;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.Set;
 
 //import com.locationiq.client.Configuration;
 import com.locationiq.client.api.*;
@@ -23,37 +24,75 @@ import LocationIq.auth.ApiKeyAuth;
  * 
  */
 
-public class Translation {
+public class TranslationAddress {
 	
-	private String latitude;
-	private String longitude;
-	private ArrayList <String> addressInformations;
-	private ArrayList <String> addressFound;
+	private  String latitude;
+	private  String longitude;
+	private  ArrayList <String> addressInformations;
+	private  ArrayList <String> addressFound;
 	
-
 	/**
 	 * 
 	 * Factory method which creates a Translation instance
 	 *
 	 */
 	
-	public static Translation given() {
-		return new Translation();
+	public static TranslationAddress givenEmptyInstance() {
+		return new TranslationAddress();
 	}
 	
-	/**
-	 * Private constructor used by Factory method given()
-	 */
+	private TranslationAddress() {
+		this.addressFound = new ArrayList <String>();
+		this.addressInformations = new ArrayList <String>();
+	}
+        
 	
-	private Translation() {
-		this.longitude=null;
-		this.latitude=null;
-		this.addressInformations = new ArrayList<String>();
+	public static class TranslationAddressBuilder{
+		
+		private TranslationAddress translationAddress;
+		
+		private TranslationAddressBuilder(final TranslationAddress translationAddress) {
+			this.translationAddress=translationAddress;
+		}
+		
+		public static TranslationAddressBuilder build() {
+			return new TranslationAddressBuilder(new TranslationAddress());
+		}
+		
+		public TranslationAddressBuilder latitude(final String lat) {
+			this.translationAddress.latitude=lat;
+			return this;
+		}
+		
+		public TranslationAddressBuilder longitude(final String lon) {
+			this.translationAddress.longitude=lon;
+			return this;
+		}
+		
+		public TranslationAddressBuilder addressInformations(final String address) throws ApiException {
+			this.translationAddress.recoveryAdresseInformations(address);
+			return this;
+		}
+		
+		public TranslationAddressBuilder addressFound() throws ApiException {
+			this.translationAddress.addressFound();
+			this.translationAddress.addressProposal();
+			return this;
+		}
+		
+		public TranslationAddress get() {
+            final TranslationAddress ret = TranslationAddress.givenEmptyInstance();
+            ret.latitude         = translationAddress.latitude;
+            ret.longitude       = translationAddress.longitude;
+            ret.addressFound    = translationAddress.addressFound;
+            ret.addressInformations    = translationAddress.addressInformations;
+            return ret;
+        }
 	}
 	
 	
 	/**
-	 * This methode return the latitude of the instance
+	 * This method return the latitude of the instance
 	 * @return latitude
 	 */
 	
@@ -61,14 +100,6 @@ public class Translation {
 		return latitude;
 	}
 	
-	/**
-	 * Setter for latitude
-	 * @param latitude
-	 */
-	
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
 
 	/**
 	 * This method return the longitude of the instance
@@ -80,15 +111,6 @@ public class Translation {
 	}
 	
 	/**
-	 * Setter for longitude
-	 * @param longitude
-	 */
-	
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
-	
-	/**
 	 * This method return a list with a lot of informations about an address research
 	 * @return adressInformations
 	 */
@@ -97,14 +119,6 @@ public class Translation {
 		return addressInformations;
 	}
 	
-	/**
-	 * Setter for adressInformations
-	 * @param adressInformations
-	 */
-	
-	public void setAdressInformations(ArrayList<String> adressInformations) {
-		this.addressInformations = adressInformations;
-	}
 	
 	/**
 	 * This method return all address found after a researcher address
@@ -115,14 +129,7 @@ public class Translation {
 		return addressFound;
 	}
 	
-	/**
-	 * Setter for adressFound
-	 * @param adressFound
-	 */
 	
-	public void setAdressFound(ArrayList<String> adressFound) {
-		this.addressFound = adressFound;
-	}
 	
 	/**
 	 * This method allows connection to LocationIQ and its database.
@@ -147,40 +154,20 @@ public class Translation {
 	 * @throws ApiException
 	 */
 	
-	public void TransalteAdresse(String adresse) throws ApiException, IllegalArgumentException{
-  	  if(adresse=="" || adresse==null) {
-  		  throw new IllegalArgumentException("Adress error");
-  	  }
-  	  ApiClient defaultClient = this.connexion();
-  	  AutocompleteApi api = new AutocompleteApi(defaultClient);
-  	  List <Object> tmp = api.autocomplete(adresse, 1, null, null, null, null, null, null);
-  	  Iterator <Object> i = tmp.iterator();
-  	  while(i.hasNext()) {
-  		  this.addressInformations.add(i.next().toString());
+	public void recoveryAdresseInformations(String adresse) throws ApiException{
+  	  	if(adresse=="" || adresse==null || adresse.isEmpty()) {
+  	  		throw new IllegalArgumentException("Address error");
+  	  	}
+  	  	ApiClient defaultClient = this.connexion();
+  	  	AutocompleteApi api = new AutocompleteApi(defaultClient);
+  	  	List <Object> tmp = api.autocomplete(adresse, 1, null, null, null, null, null, null);
+  	  	Iterator <Object> i = tmp.iterator();
+  	  	while(i.hasNext()) {
+  	  		this.addressInformations.add(i.next().toString());
   	  }
     }
 	
 	
-	/**
-	 * This method compares all addresses found in an array containing only addresses.
-	 * It returns false if the addresses are different and true otherwise.
-	 * @param selection
-	 * @return boolean res 
-	 */
-	
-	public boolean addressComparison(ArrayList <String> selection) {
-		boolean res=false;
-		for(int i = 0 ; i< selection.size()-1;i++) {
-			if(selection.get(i).equals(selection.get(i+1))) {
-				res = true;
-			}
-			
-			else {
-				return false;
-			}
-		}
-		return res;
-	}
 	
 	/**
 	 * This method displays all the addresses if they are different and only one if not.
@@ -188,13 +175,17 @@ public class Translation {
 	 */
 	
 	public void displayFoundAddress(ArrayList<String>selection) {
-		if(!this.addressComparison(selection)) {
-			for (int i = 0; i<selection.size();i++) {
-				System.out.println(i+1 +") - "+selection.get(i));
+		Set<String> tmp = new HashSet<String>(selection);
+		Iterator <String> i = tmp.iterator();
+		int cpt=1;
+		if(tmp.size()>1) {
+			while(i.hasNext()) {
+				System.out.println(cpt +") - "+i.next());
+				cpt++;
 			}
 		}
 		else {
-			System.out.println(1 +") - "+selection.get(0));
+			System.out.println(1 +") - "+i.next());
 		}
 		
 	}
@@ -243,7 +234,7 @@ public class Translation {
 	
 	/**
 	 * This method allows to return the choice of the user.
-	 * @return int numberAddress
+	 * @return numberAddress
 	 */
 	
 	public int selectionAddressProposal() {
@@ -254,10 +245,7 @@ public class Translation {
 		return numberAddress;
 	}
 
-	public static void main(String[] args) throws ApiException, IllegalArgumentException {
-		Translation t = given();
-		t.TransalteAdresse("université paris dauphine");
-		t.addressFound();
-		t.addressProposal();
+	public static void main(String[] args) throws ApiException {
+		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build().addressInformations("Université paris dauphine").addressFound().latitude("2,4").longitude("3,345").get();
 	}
 }
