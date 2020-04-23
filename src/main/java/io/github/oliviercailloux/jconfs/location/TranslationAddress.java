@@ -42,7 +42,7 @@ public class TranslationAddress {
 	}
 
 	/**
-	 * Private constructor
+	 * Private constructor 
 	 */
 
 	private TranslationAddress() {
@@ -180,13 +180,13 @@ public class TranslationAddress {
 	 * @throws ApiException
 	 */
 
-	public void recoveryAdresseInformations(String adresse) throws ApiException {
-		if (adresse == "" || adresse == null || adresse.isEmpty()) {
+	public void recoveryAdresseInformations(String address) throws ApiException {
+		if (address == "" || address == null || address.isEmpty()) {
 			throw new IllegalArgumentException("Address error");
 		}
 		ApiClient defaultClient = this.connexion();
 		AutocompleteApi api = new AutocompleteApi(defaultClient);
-		List<Object> tmp = api.autocomplete(adresse, 1, null, null, null, null, null, null);
+		List<Object> tmp = api.autocomplete(address, 1, null, null, null, null, null, null);
 		Iterator<Object> i = tmp.iterator();
 		while (i.hasNext()) {
 			this.addressInformations.add(i.next().toString());
