@@ -1,6 +1,5 @@
 package io.github.oliviercailloux.jconfs.location;
 
-
 import LocationIq.ApiClient;
 import LocationIq.ApiException;
 import java.math.BigDecimal;
@@ -13,41 +12,43 @@ import com.locationiq.client.model.*;
 
 /**
  * 
- * @author Anis HAMOUNI
- * this class allows to calculate the distance and the duration between two places defined by (longitude, latitude) 
- * and also the steps to go to the destination. 
- *  the units are meter and second, the steps are a string
+ * @author Anis HAMOUNI this class allows to calculate the distance and the
+ *         duration between two places defined by (longitude, latitude) and also
+ *         the steps to go to the destination. the units are meter and second,
+ *         the steps are a string
  */
 public class Direction {
-	private 	String depart ; 
-	private  	String arrivee;
-	private 	BigDecimal duree;
-	private 	BigDecimal distance; 
-	private   String  steps;
-
+	private String depart;
+	private String arrivee;
+	private BigDecimal duree;
+	private BigDecimal distance;
+	private String steps;
 
 	/**
 	 * 
-	 * @param dep string of format longitude,latitude example "2.287592,48.862725"
-	 * @param arriv string of format longitude,latitude example "2.3488,48.85341
-	 * steps is a string that contains all steps to go on our destination 
+	 * @param dep
+	 *            string of format longitude,latitude example "2.287592,48.862725"
+	 * @param arriv
+	 *            string of format longitude,latitude example "2.3488,48.85341 steps
+	 *            is a string that contains all steps to go on our destination
 	 * 
 	 */
 
 	public static Direction given(String dep, String arriv) {
-		return new Direction(dep,arriv);
+		return new Direction(dep, arriv);
 	}
 
 	private Direction(String dep, String arriv) {
 		this.depart = dep;
 		this.arrivee = arriv;
-		this.duree = distance = BigDecimal.ZERO ; 
-		this.steps="";
+		this.duree = distance = BigDecimal.ZERO;
+		this.steps = "";
 	}
 
 	public BigDecimal getDuree() {
 		return duree;
 	}
+
 	public BigDecimal getDistance() {
 		return distance;
 	}
@@ -57,7 +58,7 @@ public class Direction {
 	}
 
 	public void setDistance(BigDecimal dist) {
-		this.distance=dist;
+		this.distance = dist;
 	}
 
 	public String getDepart() {
@@ -69,11 +70,11 @@ public class Direction {
 	}
 
 	public void setDepart(String dep) {
-		this.depart=dep;
+		this.depart = dep;
 	}
 
 	public void setArrivee(String arr) {
-		this.arrivee=arr;
+		this.arrivee = arr;
 	}
 
 	public String getSteps() {
@@ -82,9 +83,10 @@ public class Direction {
 
 	/**
 	 * 
-	 * @param o String 
-	 * this function takes a string and returns it with a line break at each "intersections" word.
-	 * it used when we calculate the steps 
+	 * @param o
+	 *            String this function takes a string and returns it with a line
+	 *            break at each "intersections" word. it used when we calculate the
+	 *            steps
 	 */
 	private String indentedStringOnIntersect(String o) {
 		if (o == null) {
@@ -95,19 +97,23 @@ public class Direction {
 
 	/**
 	 * 
-	 * @param o String
-	 * this function removes the geometry information in the steps because it is useless
+	 * @param o
+	 *            String this function removes the geometry information in the steps
+	 *            because it is useless
 	 */
 	private String indentedStringGeometry(String o) {
 		if (o == null) {
 			return "null";
 		}
-		return o.replaceAll("geometry=[^,]++,|out=[^,]++,|in=[^,]++,|entry=\\[[^\\]]++\\],|bearings=\\[[^\\]]++\\]}?\\]?,", "");
+		return o.replaceAll(
+				"geometry=[^,]++,|out=[^,]++,|in=[^,]++,|entry=\\[[^\\]]++\\],|bearings=\\[[^\\]]++\\]}?\\]?,", "");
 	}
+
 	/**
 	 * 
 	 * @param o
-	 * @this function takes a string and returns it with a line break at each "out" word.
+	 * @this function takes a string and returns it with a line break at each "out"
+	 *       word.
 	 */
 	private String indentedStringOut(String o) {
 		if (o == null) {
@@ -116,9 +122,9 @@ public class Direction {
 		return o.replaceAll("out=", "\n out=");
 	}
 
-
 	/**
 	 * this method create an ApiClient and connect it to to the API with our key
+	 * 
 	 * @return ApiClient
 	 * @throws ApiException
 	 */
@@ -127,12 +133,14 @@ public class Direction {
 		ApiClient defaultClient = Configuration.getDefaultApiClient();
 		defaultClient.setBasePath("https://eu1.locationiq.com/v1");
 		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
-		key.setApiKey("d4b9a23eaef07d");  // here our key
+		key.setApiKey("d4b9a23eaef07d"); // here our key
 		return defaultClient;
 	}
+
 	/**
-	 * this function calculates the time and distance as well as the steps
-	 *  to move between the two attributes of the class which are coordinates of localisation
+	 * this function calculates the time and distance as well as the steps to move
+	 * between the two attributes of the class which are coordinates of localisation
+	 * 
 	 * @throws ApiException
 	 */
 	public void getDirection() throws ApiException {
@@ -141,20 +149,22 @@ public class Direction {
 
 		DirectionsApi api = new DirectionsApi(defaultClient);
 		/**
-		 * the format of the coordinate must be a String of { longitude,latitude; longitude,latitude}
+		 * the format of the coordinate must be a String of { longitude,latitude;
+		 * longitude,latitude}
 		 */
-		DirectionsDirections response = api.directions(depart+";"+arrivee, null, null, null, null, null, null, "true", null, null, "simplified", null);
-		List <DirectionsDirectionsRoutes> routes = response.getRoutes();
+		DirectionsDirections response = api.directions(depart + ";" + arrivee, null, null, null, null, null, null,
+				"true", null, null, "simplified", null);
+		List<DirectionsDirectionsRoutes> routes = response.getRoutes();
 		Iterator<DirectionsDirectionsRoutes> i = routes.iterator();
-		while(i.hasNext()){
+		while (i.hasNext()) {
 			DirectionsDirectionsRoutes dr = (DirectionsDirectionsRoutes) i.next();
-			distance = distance.add( dr.getDistance());
-			this.duree=this.duree.add( dr.getDuration());
+			distance = distance.add(dr.getDistance());
+			this.duree = this.duree.add(dr.getDuration());
 			this.steps = this.steps + dr.toString();
 		}
-		this.steps=indentedStringOnIntersect(this.steps);
-		this.steps=indentedStringGeometry(this.steps);
-		this.steps=indentedStringOut(this.steps);
+		this.steps = indentedStringOnIntersect(this.steps);
+		this.steps = indentedStringGeometry(this.steps);
+		this.steps = indentedStringOut(this.steps);
 	}
 
 }
