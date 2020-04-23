@@ -41,10 +41,23 @@ public class TranslationAddress {
 		return new TranslationAddress();
 	}
 
+	/**
+	 * Private constructor
+	 */
+
 	private TranslationAddress() {
 		this.addressFound = new ArrayList<String>();
 		this.addressInformations = new ArrayList<String>();
 	}
+
+	/**
+	 * This class is a builder, it's allows to make the object TranslsationAddress
+	 * immutable. It builds all the attributes of the class using a
+	 * TranslationAddress object.
+	 * 
+	 * @author floryan
+	 *
+	 */
 
 	public static class TranslationAddressBuilder {
 
@@ -58,26 +71,36 @@ public class TranslationAddress {
 			return new TranslationAddressBuilder(new TranslationAddress());
 		}
 
+		// Instantiate attribute latitude
+
 		public TranslationAddressBuilder latitude(final String lat) {
 			this.translationAddress.latitude = lat;
 			return this;
 		}
+
+		// Instantiate attribute longitude
 
 		public TranslationAddressBuilder longitude(final String lon) {
 			this.translationAddress.longitude = lon;
 			return this;
 		}
 
+		// Instantiate attribute addressInformations
+
 		public TranslationAddressBuilder addressInformations(final String address) throws ApiException {
 			this.translationAddress.recoveryAdresseInformations(address);
 			return this;
 		}
+
+		// Instantiate attribute addressFound
 
 		public TranslationAddressBuilder addressFound() throws ApiException {
 			this.translationAddress.addressFound();
 			this.translationAddress.addressProposal();
 			return this;
 		}
+
+		// Return the unique object
 
 		public TranslationAddress get() {
 			final TranslationAddress ret = TranslationAddress.givenEmptyInstance();
