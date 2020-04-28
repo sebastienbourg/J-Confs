@@ -68,9 +68,9 @@ import io.github.oliviercailloux.jconfs.conference.InvalidConferenceFormatExcept
  */
 public class CalendarOnline {
 
-	private CalDavCalendarGeneric connector;
+	private CalendarBuilder connector;
 
-	public CalendarOnline(CalDavCalendarGeneric connector) {
+	public CalendarOnline(CalendarBuilder connector) {
 		this.connector=connector;
 	}
 
@@ -89,12 +89,17 @@ public class CalendarOnline {
 		CalendarQuery calendarQuery = searchQuery.generate();
 		Set<Conference> listConferencesUser = new LinkedHashSet<>();
 		List<Calendar> calendarsResult = connector.collectionCalendarsOnline.queryCalendars(this.connector.httpclient, calendarQuery);
+		
 		for (Calendar calendar : calendarsResult) {
+			try { 
 			ComponentList<VEvent> componentList = calendar.getComponents(Component.VEVENT);
 			Iterator<VEvent> eventIterator = componentList.iterator();
 			while (eventIterator.hasNext()) {
 				VEvent vEventFound = eventIterator.next();
 				listConferencesUser.add(ConferenceReader.createConference(vEventFound));
+			}
+			} catch(Exception e) {
+				System.out.println("Conference unreadable");
 			}
 		}
 		return listConferencesUser;

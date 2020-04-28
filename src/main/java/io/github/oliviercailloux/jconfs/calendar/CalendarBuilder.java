@@ -1,6 +1,7 @@
 package io.github.oliviercailloux.jconfs.calendar;
 
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -57,7 +58,7 @@ import net.fortuna.ical4j.model.property.Url;
  *  @author machria & sbourg
  *  Builder which create the connection with online calendar
  */
-public class CalDavCalendarGeneric {
+public class CalendarBuilder {
 	protected String url;
 	protected String username;
 	protected String password;
@@ -68,7 +69,9 @@ public class CalDavCalendarGeneric {
 	protected CalDAVCollection collectionCalendarsOnline;
 	protected static int port=443;
 	protected String postUrl;
-
+	public static CalendarBuilder given(String url, String postUrl, UserCredentials user) {
+		return new CalendarBuilder(url, user.getUsername(), user.getPassword(), user.getCalendarId(), postUrl) ;
+	}
 
 	/**
 	 * Constructor for a generic calendar object 
@@ -79,7 +82,7 @@ public class CalDavCalendarGeneric {
 	 * @param port
 	 * @param postUrl
 	 */
-	public CalDavCalendarGeneric(String url, String userName, String password, String calendarID,String postUrl) {
+	private CalendarBuilder(String url, String userName, String password, String calendarID,String postUrl) {
 		this.url = url;
 		this.username = userName;
 		this.password = password;
@@ -92,6 +95,47 @@ public class CalDavCalendarGeneric {
 		hostTarget = new HttpHost(this.url, port, "https");
 		collectionCalendarsOnline = new CalDAVCollection(this.postUrl+"/calendars/" + this.username + "/" + this.calendarId,
 				hostTarget, new CalDAV4JMethodFactory(), null);
+	}
+	
+	
+	public static void main(String args[]) throws CalDAV4JException, URISyntaxException, ParseException, InvalidConferenceFormatException, IOException {
+		UserCredentials a = new UserCredentials();
+		a.readFile();
+		CalendarBuilder b = given("us.cloudamo.com", "/remote.php/dav", a) ;
+		CalendarOnline c = new CalendarOnline(b) ;
+		LocalDate start = null;
+
+		 LocalDate end = null;
+
+		 String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
+
+		 try {
+
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		 start = LocalDate.parse("28/04/2020", formatter);
+
+		 end = LocalDate.parse("29/04/2020", formatter);
+
+		 } catch (Exception e) {
+
+		 throw new IllegalArgumentException("Date impossible to put in the conference", e);
+
+		}
+
+		 Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation", start, end, 1.36,
+
+		 "France", "Paris");
+
+		 //c.addOnlineConference(conference);
+		 
+		 
+		 Set<Conference> var = c.getOnlineConferences();
+		 for (Conference calendar : var) {
+
+			 System.out.println(calendar.toString());
+
+			}
 	}
 
 
