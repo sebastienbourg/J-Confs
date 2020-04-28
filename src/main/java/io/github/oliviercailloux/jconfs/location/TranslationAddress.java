@@ -74,14 +74,14 @@ public class TranslationAddress {
 		// Instantiate attribute latitude
 
 		public TranslationAddressBuilder latitude(final String lat) {
-			this.translationAddress.latitude = lat;
+			this.translationAddress.recoveryLatitude();
 			return this;
 		}
 
 		// Instantiate attribute longitude
 
 		public TranslationAddressBuilder longitude(final String lon) {
-			this.translationAddress.longitude = lon;
+			this.translationAddress.recoveryLongitude();
 			return this;
 		}
 
@@ -95,7 +95,7 @@ public class TranslationAddress {
 		// Instantiate attribute addressFound
 
 		public TranslationAddressBuilder addressFound() throws ApiException {
-			this.translationAddress.addressFound();
+			this.translationAddress.recoveryAddressFound();
 			this.translationAddress.addressProposal();
 			return this;
 		}
@@ -223,7 +223,7 @@ public class TranslationAddress {
 	 * user wants.
 	 */
 
-	public void addressFound() {
+	public void recoveryAddressFound() {
 		for (int i = 0; i < this.addressInformations.size(); i++) {
 			String contenu = this.addressInformations.get(i);
 			String hash = contenu.substring(1, contenu.length() - 2);
@@ -248,9 +248,9 @@ public class TranslationAddress {
 
 	public void addressProposal() {
 		this.displayFoundAddress(this.getAdressFound());
-		int numberAddress = this.selectionAddressProposal();
-		for (int i = 0; i < this.addressInformations.size(); i++) {
-			if (i != numberAddress - 1) {
+		String address = this.selectionAddressProposal();
+		for (int i = 0; i < this.addressFound.size(); i++) {
+			if(!address.equals(this.addressFound.get(i))) {
 				this.addressFound.remove(i);
 				this.addressInformations.remove(i);
 				i--;
@@ -264,17 +264,38 @@ public class TranslationAddress {
 	 * @return numberAddress
 	 */
 
-	public int selectionAddressProposal() {
-		System.out.print("Saisir le numéro associé à l'adresse de votre choix: ");
+	public String selectionAddressProposal() {
+		System.out.print("Enter the address the address you want (exactly the same as the one displayed): ");
 		Scanner sc = new Scanner(System.in);
-		int numberAddress = sc.nextInt();
+		String address = sc.nextLine();
 		sc.close();
-		return numberAddress;
+		return address;
+	}
+	
+	public void recoveryLatitude() {
+		String search = "lat=";
+		int posDep = this.addressInformations.get(0).indexOf(search);
+		int posArr = this.addressInformations.get(0).indexOf(", lon=");
+		String add = this.addressInformations.get(0).substring(posDep + search.length(), posArr);
+		this.latitude=add;
+	}
+	
+	public void recoveryLongitude() {
+		String search = "lon=";
+		int posDep = this.addressInformations.get(0).indexOf(search);
+		int posArr = this.addressInformations.get(0).indexOf(", boundingbox=");
+		String add = this.addressInformations.get(0).substring(posDep + search.length(), posArr);
+		this.longitude=add;
 	}
 
 	public static void main(String[] args) throws ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("Université paris dauphine").addressFound().latitude("2,4").longitude("3,345")
+				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude("2,4").longitude("3,345")
 				.get();
+		for(int i = 0; i<address.getAdressFound().size();i++) {
+			System.out.println(address.getAdressInformations().get(i));
+		}
+		System.out.println(address.getLatitude());
+		System.out.println(address.getLongitude());
 	}
 }
