@@ -22,7 +22,7 @@ class TestTranslationAddress {
 
 	@Test
 	public final void creatInstanceTest() throws ApiException {
-		TranslationAddress t = TranslationAddress.givenEmptyInstance();
+		TranslationAddress t = TranslationAddress.newInstance();
 		assertEquals(null, t.getLatitude());
 		assertEquals(0, t.getAdressInformations().size());
 	}
@@ -35,39 +35,55 @@ class TestTranslationAddress {
 	 */
 
 	@Test
-	public final void addressInformationsTest() throws LocationIq.ApiException {
-		TranslationAddress t = TranslationAddress.givenEmptyInstance();
+	public final void recoveryAddressInformationsTest() throws LocationIq.ApiException {
+		TranslationAddress t = TranslationAddress.newInstance();
 		t.recoveryAdresseInformations("Université paris dauphine");
 		boolean test = (t.getAdressInformations().size() > 2);
 		assertEquals(true, test);
 	}
 
 	/**
-	 * This method test the correct processing of data with the recovery only of the
-	 * addresses which will then be offered to the user so that he selects the
-	 * correct one.
+	 * This method tests the recovery of several addresses informations associated
+	 * with a search.
 	 * 
 	 * @throws LocationIq.ApiException
 	 */
 
-	// @Test public final void treatmentAdressInformationsTest() throws
-	// LocationIq.ApiException, IllegalArgumentException { Translation t =
-	// Translation.given(); t.TransalteAdresse("Université paris dauphine");
-	// t.addressFound(); boolean test = t.addressComparison(t.getAdressFound());
-	// assertEquals(true,test); }
+	@Test
+	public final void recoveryAddressFound() throws LocationIq.ApiException {
+		TranslationAddress t = TranslationAddress.newInstance();
+		t.recoveryAdresseInformations("Université paris dauphine");
+		t.recoveryAddressFound();
+		boolean test = (t.getAdressFound().size() > 2);
+		assertEquals(true, test);
+	}
 
 	/**
-	 * This method test the fact that when the user selects an address the
-	 * unnecessary lines are deleted.
+	 * This method tests the builder
 	 * 
 	 * @throws LocationIq.ApiException
 	 */
 
-	// @Test public final void selectionAddressProposal() throws
-	// IllegalArgumentException, LocationIq.ApiException { Translation t =
-	// Translation.given(); t.TransalteAdresse("Université paris dauphine");
-	// t.addressFound(); t.addressProposal();
-	// assertEquals(1,t.getAdressFound().size());
-	// assertEquals(1,t.getAdressInformations().size()); }
+	@Test
+	public final void builder() throws LocationIq.ApiException {
+		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
+				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude().longitude()
+				.get();
+	}
+
+	/**
+	 * This method tests that the latitude and longitude to retrieve are correct
+	 * 
+	 * @throws LocationIq.ApiException
+	 */
+
+	@Test
+	public final void latitudeLongitude() throws LocationIq.ApiException {
+		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
+				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude().longitude()
+				.get();
+		assertEquals("48.87015115", address.getLatitude());
+		assertEquals("2.2735218497104", address.getLongitude());
+	}
 
 }

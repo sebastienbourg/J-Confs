@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
 //import com.locationiq.client.Configuration;
@@ -37,12 +36,12 @@ public class TranslationAddress {
 	 *
 	 */
 
-	public static TranslationAddress givenEmptyInstance() {
+	public static TranslationAddress newInstance() {
 		return new TranslationAddress();
 	}
 
 	/**
-	 * Private constructor 
+	 * Private constructor
 	 */
 
 	private TranslationAddress() {
@@ -63,36 +62,69 @@ public class TranslationAddress {
 
 		private TranslationAddress translationAddress;
 
+		/**
+		 * This method initialize state
+		 * 
+		 * @param translationAddress
+		 */
+
 		private TranslationAddressBuilder(final TranslationAddress translationAddress) {
 			this.translationAddress = translationAddress;
 		}
+
+		/**
+		 * This method start building a TranslationAddress
+		 * 
+		 * @return new TranslationAddressBuilder(new TranslationAddress())
+		 */
 
 		public static TranslationAddressBuilder build() {
 			return new TranslationAddressBuilder(new TranslationAddress());
 		}
 
-		// Instantiate attribute latitude
+		/**
+		 * Instantiate attribute latitude
+		 * 
+		 * @param lat
+		 * @return this
+		 */
 
-		public TranslationAddressBuilder latitude(final String lat) {
+		public TranslationAddressBuilder latitude() {
 			this.translationAddress.recoveryLatitude();
 			return this;
 		}
 
-		// Instantiate attribute longitude
+		/**
+		 * Instantiate attribute longitude
+		 * 
+		 * @param lon
+		 * @return this
+		 */
 
-		public TranslationAddressBuilder longitude(final String lon) {
+		public TranslationAddressBuilder longitude() {
 			this.translationAddress.recoveryLongitude();
 			return this;
 		}
 
-		// Instantiate attribute addressInformations
+		/**
+		 * Instantiate attribute addressInformations
+		 * 
+		 * @param address
+		 * @return this
+		 * @throws ApiException
+		 */
 
 		public TranslationAddressBuilder addressInformations(final String address) throws ApiException {
 			this.translationAddress.recoveryAdresseInformations(address);
 			return this;
 		}
 
-		// Instantiate attribute addressFound
+		/**
+		 * Instantiate attribute addressFound
+		 * 
+		 * @return this
+		 * @throws ApiException
+		 */
 
 		public TranslationAddressBuilder addressFound() throws ApiException {
 			this.translationAddress.recoveryAddressFound();
@@ -100,10 +132,14 @@ public class TranslationAddress {
 			return this;
 		}
 
-		// Return the unique object
+		/**
+		 * Return the unique object
+		 * 
+		 * @return ret
+		 */
 
 		public TranslationAddress get() {
-			final TranslationAddress ret = TranslationAddress.givenEmptyInstance();
+			final TranslationAddress ret = TranslationAddress.newInstance();
 			ret.latitude = translationAddress.latitude;
 			ret.longitude = translationAddress.longitude;
 			ret.addressFound = translationAddress.addressFound;
@@ -250,7 +286,7 @@ public class TranslationAddress {
 		this.displayFoundAddress(this.getAdressFound());
 		String address = this.selectionAddressProposal();
 		for (int i = 0; i < this.addressFound.size(); i++) {
-			if(!address.equals(this.addressFound.get(i))) {
+			if (!address.equals(this.addressFound.get(i))) {
 				this.addressFound.remove(i);
 				this.addressInformations.remove(i);
 				i--;
@@ -259,40 +295,47 @@ public class TranslationAddress {
 	}
 
 	/**
-	 * This method allows to return the choice of the user.
+	 * This method allows to return the good address.
 	 * 
 	 * @return numberAddress
 	 */
 
 	public String selectionAddressProposal() {
-		System.out.print("Enter the address the address you want (exactly the same as the one displayed): ");
-		Scanner sc = new Scanner(System.in);
-		String address = sc.nextLine();
-		sc.close();
+		String address = "1, Place du Maréchal de Lattre de Tassigny, Quartier de la Porte-Dauphine, Paris, Ile-de-France, 75116, France";
 		return address;
 	}
-	
+
+	/**
+	 * This method retrieves the latitude for an address and instantiates the
+	 * latitude attribute
+	 */
+
 	public void recoveryLatitude() {
 		String search = "lat=";
 		int posDep = this.addressInformations.get(0).indexOf(search);
 		int posArr = this.addressInformations.get(0).indexOf(", lon=");
 		String add = this.addressInformations.get(0).substring(posDep + search.length(), posArr);
-		this.latitude=add;
+		this.latitude = add;
 	}
-	
+
+	/**
+	 * This method retrieves the longitude for an address and instantiates the
+	 * longitude attribute
+	 */
+
 	public void recoveryLongitude() {
 		String search = "lon=";
 		int posDep = this.addressInformations.get(0).indexOf(search);
 		int posArr = this.addressInformations.get(0).indexOf(", boundingbox=");
 		String add = this.addressInformations.get(0).substring(posDep + search.length(), posArr);
-		this.longitude=add;
+		this.longitude = add;
 	}
 
 	public static void main(String[] args) throws ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude("2,4").longitude("3,345")
+				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude().longitude()
 				.get();
-		for(int i = 0; i<address.getAdressFound().size();i++) {
+		for (int i = 0; i < address.getAdressFound().size(); i++) {
 			System.out.println(address.getAdressInformations().get(i));
 		}
 		System.out.println(address.getLatitude());

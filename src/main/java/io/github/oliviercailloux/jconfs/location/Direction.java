@@ -23,6 +23,8 @@ public class Direction {
 	private BigDecimal duree;
 	private BigDecimal distance;
 	private String steps;
+	private TranslationAddress firstAddress;
+	private TranslationAddress secondAddress;
 
 	/**
 	 * 
