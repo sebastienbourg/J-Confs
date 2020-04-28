@@ -2,6 +2,8 @@ package io.github.oliviercailloux.jconfs.location;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.Test;
 
 import com.locationiq.client.ApiException;
@@ -32,27 +34,33 @@ class TestTranslationAddress {
 	 * autocomplete method of LocationIQ
 	 * 
 	 * @throws LocationIq.ApiException
+	 * @throws InterruptedException 
 	 */
 
-	@Test
-	public final void recoveryAddressInformationsTest() throws LocationIq.ApiException {
-		TranslationAddress t = TranslationAddress.newInstance();
-		t.recoveryAdresseInformations("Université paris dauphine");
-		boolean test = (t.getAdressInformations().size() > 2);
-		assertEquals(true, test);
-	}
+	
+	  @Test 
+	  public final void recoveryAddressInformationsTest() throws LocationIq.ApiException, InterruptedException { 
+		  TranslationAddress t =TranslationAddress.newInstance();
+		  t.recoveryAddressInformations("Université paris dauphine"); 
+		  TimeUnit.SECONDS.sleep(1);
+		  boolean test =(t.getAdressInformations().size() > 2);
+		  assertEquals(true, test); 
+	  }
+	 
 
 	/**
 	 * This method tests the recovery of several addresses informations associated
 	 * with a search.
 	 * 
 	 * @throws LocationIq.ApiException
+	 * @throws InterruptedException 
 	 */
 
 	@Test
-	public final void recoveryAddressFound() throws LocationIq.ApiException {
+	public final void recoveryAddressFoundTest() throws LocationIq.ApiException, InterruptedException {
 		TranslationAddress t = TranslationAddress.newInstance();
-		t.recoveryAdresseInformations("Université paris dauphine");
+		t.recoveryAddressInformations("1, Place du Maréchal de Lattre de Tassigny");
+		TimeUnit.SECONDS.sleep(1);
 		t.recoveryAddressFound();
 		boolean test = (t.getAdressFound().size() > 2);
 		assertEquals(true, test);
@@ -67,7 +75,7 @@ class TestTranslationAddress {
 	@Test
 	public final void builder() throws LocationIq.ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude().longitude()
+				.addressInformations("Université paris dauphine").addressFound().latitude().longitude()
 				.get();
 	}
 
@@ -80,8 +88,10 @@ class TestTranslationAddress {
 	@Test
 	public final void latitudeLongitude() throws LocationIq.ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude().longitude()
+				.addressInformations("Universtié paris dauphine").addressFound().latitude().longitude()
 				.get();
+		System.out.println(address.getLatitude());
+		System.out.println(address.getLongitude());
 		assertEquals("48.87015115", address.getLatitude());
 		assertEquals("2.2735218497104", address.getLongitude());
 	}

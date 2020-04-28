@@ -115,7 +115,7 @@ public class TranslationAddress {
 		 */
 
 		public TranslationAddressBuilder addressInformations(final String address) throws ApiException {
-			this.translationAddress.recoveryAdresseInformations(address);
+			this.translationAddress.recoveryAddressInformations(address);
 			return this;
 		}
 
@@ -216,7 +216,7 @@ public class TranslationAddress {
 	 * @throws ApiException
 	 */
 
-	public void recoveryAdresseInformations(String address) throws ApiException {
+	public void recoveryAddressInformations(String address) throws ApiException {
 		if (address == "" || address == null || address.isEmpty()) {
 			throw new IllegalArgumentException("Address error");
 		}
@@ -333,11 +333,9 @@ public class TranslationAddress {
 
 	public static void main(String[] args) throws ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("1, Place du Maréchal de Lattre de Tassigny").addressFound().latitude().longitude()
+				.addressInformations("Université paris dauphine").addressFound().latitude().longitude()
 				.get();
-		for (int i = 0; i < address.getAdressFound().size(); i++) {
-			System.out.println(address.getAdressInformations().get(i));
-		}
+		System.out.println(address.getAdressInformations().size());
 		System.out.println(address.getLatitude());
 		System.out.println(address.getLongitude());
 	}
