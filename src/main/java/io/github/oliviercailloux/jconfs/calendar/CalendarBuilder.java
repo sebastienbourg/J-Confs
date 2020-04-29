@@ -101,7 +101,7 @@ public class CalendarBuilder {
 	public static void main(String args[]) throws CalDAV4JException, URISyntaxException, ParseException, InvalidConferenceFormatException, IOException {
 		UserCredentials a = new UserCredentials();
 		a.readFile();
-		CalendarBuilder b = given("us.cloudamo.com", "/remote.php/dav", a) ;
+		CalendarBuilder b = given("ppp.woelkli.com", "/remote.php/dav", a) ;
 		CalendarOnline c = new CalendarOnline(b) ;
 		LocalDate start = null;
 
