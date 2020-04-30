@@ -40,17 +40,17 @@ public class TestCalendarOnlineNextcloud {
 	public void testGetOnlineConferenceFromUid()
 			throws Exception {
 
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
-		String uidSearch = "685f1f53-bece-4070-8456-7a1431224252-493566496";
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		String uidSearch = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
 		Optional<Conference> potentialConference;
 		potentialConference = instanceCalendarOnline.getConferenceFromUid(uidSearch);
 		if (potentialConference.isPresent()) {
 			Conference conferenceFound = potentialConference.get();
-			assertEquals("93",conferenceFound.getTitle());
+			assertEquals("Java formation",conferenceFound.getTitle());
 			assertEquals(uidSearch,conferenceFound.getUid());
 			assertEquals("Paris",conferenceFound.getCity());
 			assertEquals("France",conferenceFound.getCountry());
-			assertEquals("2020-04-29",conferenceFound.getStartDate().toString());
+			assertEquals("2020-04-28",conferenceFound.getStartDate().toString());
 			assertEquals("1.36",conferenceFound.getFeeRegistration().toString());
 		}
 		else {
@@ -62,7 +62,7 @@ public class TestCalendarOnlineNextcloud {
 	public void testGetAllOnlineConferences()
 			throws Exception {
 
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		Set<Conference> collectionConferences = instanceCalendarOnline.getOnlineConferences();
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
 		while (iteratorConf.hasNext()) {
@@ -74,7 +74,7 @@ public class TestCalendarOnlineNextcloud {
 	@Test
 	public void testConferenceToVEvent() throws Exception{
 		VEvent conferenceVEvent;
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		URL url = new URL("http://fruux.com");
 		String city = "Paris";
 		String country = "France";
@@ -108,10 +108,10 @@ public class TestCalendarOnlineNextcloud {
 
 	@Test
 	public void testAddOnlineConference() throws Exception {
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		LocalDate start = null;
 		LocalDate end = null;
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			start = LocalDate.parse("06/08/2019", formatter);
@@ -128,8 +128,8 @@ public class TestCalendarOnlineNextcloud {
 
 	@Test
 	public void testDelete() throws Exception {
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());
 		if(instanceCalendarOnline.getConferenceFromUid(uid).isPresent()) {

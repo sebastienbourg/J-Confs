@@ -14,6 +14,10 @@ public class UserCredentials
 	private String password;
 	private String calendarId;
 
+	
+	public UserCredentials() throws IOException {
+		this.readFile();
+	}
 	public String getUsername() {
 		return username;
 	}

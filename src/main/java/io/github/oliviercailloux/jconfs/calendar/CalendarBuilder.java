@@ -127,7 +127,7 @@ public class CalendarBuilder {
 
 		 "France", "Paris");
 
-		 //c.addOnlineConference(conference);
+		 c.addOnlineConference(conference);
 		 
 		 
 		 Set<Conference> var = c.getOnlineConferences();
