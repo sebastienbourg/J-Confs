@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 //import com.locationiq.client.Configuration;
@@ -236,7 +237,7 @@ public class TranslationAddress {
 	 * @param selection
 	 */
 
-	public void displayFoundAddress(ArrayList<String> selection) {
+	public boolean displayFoundAddress(ArrayList<String> selection) {
 		Set<String> tmp = new HashSet<String>(selection);
 		Iterator<String> i = tmp.iterator();
 		int cpt = 1;
@@ -246,8 +247,10 @@ public class TranslationAddress {
 				cpt++;
 			}
 		} else {
-			System.out.println(1 + ") - " + i.next());
+			System.out.println("La seule adresse est trouvée est: " + i.next());
+			return true;
 		}
+		return false;
 
 	}
 
@@ -283,15 +286,26 @@ public class TranslationAddress {
 	 */
 
 	public void addressProposal() {
-		this.displayFoundAddress(this.getAdressFound());
-		String address = this.selectionAddressProposal();
-		for (int i = 0; i < this.addressFound.size(); i++) {
-			if (!address.equals(this.addressFound.get(i))) {
+		boolean displayall = this.displayFoundAddress(this.getAdressFound());
+		if(displayall==false) {
+			String address = this.selectionAddressProposal();
+			for (int i = 0; i < this.addressFound.size(); i++) {
+				if (!address.equals(this.addressFound.get(i))) {
+					this.addressFound.remove(i);
+					this.addressInformations.remove(i);
+					i--;
+				}
+			}
+		}
+		else {
+			for(int i = 1 ; i < this.addressFound.size(); i++ ) {
 				this.addressFound.remove(i);
 				this.addressInformations.remove(i);
 				i--;
 			}
 		}
+		
+		
 	}
 
 	/**
@@ -301,7 +315,10 @@ public class TranslationAddress {
 	 */
 
 	public String selectionAddressProposal() {
-		String address = "1, Place du Maréchal de Lattre de Tassigny, Quartier de la Porte-Dauphine, Paris, Ile-de-France, 75116, France";
+		System.out.println("Enter address of your choice (exactly the same proposed): ");
+		Scanner sc = new Scanner(System.in);
+		String address = sc.nextLine();
+		sc.close();
 		return address;
 	}
 
