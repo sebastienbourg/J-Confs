@@ -42,7 +42,7 @@ class TestTranslationAddress {
 	  public final void recoveryAddressInformationsTest() throws LocationIq.ApiException, InterruptedException { 
 		  TranslationAddress t =TranslationAddress.newInstance();
 		  t.recoveryAddressInformations("Université paris dauphine"); 
-		  TimeUnit.SECONDS.sleep(1);
+		  TimeUnit.SECONDS.sleep(2);
 		  boolean test =(t.getAdressInformations().size() > 2);
 		  assertEquals(true, test); 
 	  }
