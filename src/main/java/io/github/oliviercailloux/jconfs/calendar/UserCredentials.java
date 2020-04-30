@@ -32,12 +32,15 @@ public class UserCredentials
 		try (InputStream is = Files.newInputStream(infile)) {
 			is.readAllBytes();
 			a = Files.readString(infile); 
-			System.out.println(a.split("\n")[0].split("username = ")[1].split("\n")[0]);
+			System.out.println(a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length()-1));
+			System.out.println(a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length()-1));
+			System.out.println(a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length()-1));
+
 		}
 
-		this.username = a.split("\n")[0].split("username = ")[1].split("\n")[0].replaceAll("[\r\n]+", "") ;
-		this.password = a.split("\n")[1].split("password = ")[1].split("\n")[0].replaceAll("[\r\n]+", "");
-		this.calendarId = a.split("\n")[2].split("calendarId = ")[1].split("\n")[0].replaceAll("[\r\n]+", "");
+		this.username = a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length()-1);
+		this.password = a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length()-1);
+		this.calendarId = a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length()-1);
 	}
 
 
