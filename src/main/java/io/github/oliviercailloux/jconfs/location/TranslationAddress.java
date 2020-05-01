@@ -270,9 +270,9 @@ public class TranslationAddress {
 		}
 		ArrayList<String> selection = new ArrayList<String>();
 		for (int i = 0; i < this.addressInformations.size(); i++) {
-			String search = "display_address=";
+			String search = "display_name=";
 			int posDep = this.addressInformations.get(i).indexOf(search);
-			int posArr = this.addressInformations.get(i).indexOf(", address={");
+			int posArr = this.addressInformations.get(i).indexOf(", display_place=");
 			String add = this.addressInformations.get(i).substring(posDep + search.length(), posArr);
 			selection.add(add);
 		}
@@ -350,7 +350,7 @@ public class TranslationAddress {
 
 	public static void main(String[] args) throws ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("Université paris dauphine").addressFound().latitude().longitude()
+				.addressInformations("76 avenue jean rostand domont 95330").addressFound().latitude().longitude()
 				.get();
 		System.out.println(address.getAdressInformations().size());
 		System.out.println(address.getLatitude());
