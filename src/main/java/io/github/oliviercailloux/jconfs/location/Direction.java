@@ -18,9 +18,9 @@ import com.locationiq.client.model.*;
  *         the steps are a string
  */
 public class Direction {
-	private String depart;
-	private String arrivee;
-	private BigDecimal duree;
+	private String addressDeparture;
+	private String addressArrival;
+	private BigDecimal duration;
 	private BigDecimal distance;
 	private String steps;
 	private TranslationAddress firstAddress;
@@ -33,50 +33,57 @@ public class Direction {
 	 * @param arriv
 	 *            string of format longitude,latitude example "2.3488,48.85341 steps
 	 *            is a string that contains all steps to go on our destination
+	 * @throws ApiException 
 	 * 
 	 */
 
-	public static Direction given(String dep, String arriv) {
+	public static Direction given(String dep, String arriv) throws ApiException {
 		return new Direction(dep, arriv);
 	}
 
-	private Direction(String dep, String arriv) {
-		this.depart = dep;
-		this.arrivee = arriv;
-		this.duree = distance = BigDecimal.ZERO;
+	private Direction(String dep, String arriv) throws ApiException {
+		this.addressDeparture = dep;
+		this.addressArrival = arriv;
+		this.duration = distance = BigDecimal.ZERO;
 		this.steps = "";
+		this.firstAddress = TranslationAddress.TranslationAddressBuilder.build()
+							.addressInformations(this.addressDeparture).addressFound().latitude().longitude()
+							.get();
+		this.secondAddress = TranslationAddress.TranslationAddressBuilder.build()
+				.addressInformations(this.addressArrival).addressFound().latitude().longitude()
+				.get();
 	}
 
-	public BigDecimal getDuree() {
-		return duree;
+	public BigDecimal getDuration() {
+		return duration;
 	}
 
 	public BigDecimal getDistance() {
 		return distance;
 	}
 
-	public void setDuree(BigDecimal duree) {
-		this.duree = duree;
+	public void setDuration(BigDecimal duree) {
+		this.duration = duree;
 	}
 
 	public void setDistance(BigDecimal dist) {
 		this.distance = dist;
 	}
 
-	public String getDepart() {
-		return this.depart;
+	public String getDeparture() {
+		return this.addressDeparture;
 	}
 
-	public String getArrivee() {
-		return this.arrivee;
+	public String getArrival() {
+		return this.addressArrival;
 	}
 
-	public void setDepart(String dep) {
-		this.depart = dep;
+	public void setDeparture(String dep) {
+		this.addressDeparture = dep;
 	}
 
-	public void setArrivee(String arr) {
-		this.arrivee = arr;
+	public void setArrivQL(String arr) {
+		this.addressArrival = arr;
 	}
 
 	public String getSteps() {
@@ -128,10 +135,9 @@ public class Direction {
 	 * this method create an ApiClient and connect it to to the API with our key
 	 * 
 	 * @return ApiClient
-	 * @throws ApiException
 	 */
 
-	public ApiClient connexion() throws ApiException {
+	public ApiClient connexion() {
 		ApiClient defaultClient = Configuration.getDefaultApiClient();
 		defaultClient.setBasePath("https://eu1.locationiq.com/v1");
 		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
@@ -148,20 +154,24 @@ public class Direction {
 	public void getDirection() throws ApiException {
 
 		ApiClient defaultClient = this.connexion();
+		
+		String latLonAddressDeparture = firstAddress.getLongitude() + "," + firstAddress.getLatitude();
+		String latLonAddressArrival = secondAddress.getLongitude() + "," + secondAddress.getLatitude();
+		
 
 		DirectionsApi api = new DirectionsApi(defaultClient);
 		/**
 		 * the format of the coordinate must be a String of { longitude,latitude;
 		 * longitude,latitude}
 		 */
-		DirectionsDirections response = api.directions(depart + ";" + arrivee, null, null, null, null, null, null,
+		DirectionsDirections response = api.directions(latLonAddressDeparture + ";" + latLonAddressArrival, null, null, null, null, null, null,
 				"true", null, null, "simplified", null);
 		List<DirectionsDirectionsRoutes> routes = response.getRoutes();
 		Iterator<DirectionsDirectionsRoutes> i = routes.iterator();
 		while (i.hasNext()) {
-			DirectionsDirectionsRoutes dr = (DirectionsDirectionsRoutes) i.next();
+			DirectionsDirectionsRoutes dr = i.next();
 			distance = distance.add(dr.getDistance());
-			this.duree = this.duree.add(dr.getDuration());
+			this.duration = this.duration.add(dr.getDuration());
 			this.steps = this.steps + dr.toString();
 		}
 		this.steps = indentedStringOnIntersect(this.steps);
