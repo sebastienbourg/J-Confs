@@ -60,7 +60,7 @@ public class Direction {
 	public BigDecimal getDuration() {
 		return duration;
 	}
-	
+
 	/**
 	 * Return the distance in meters 
 	 * 
@@ -69,7 +69,7 @@ public class Direction {
 	public BigDecimal getDistance() {
 		return distance;
 	}
-	
+
 	/**
 	 * Return the departure address 
 	 * 
@@ -87,7 +87,7 @@ public class Direction {
 	public String getArrival() {
 		return this.addressArrival;
 	}
-	
+
 	/**
 	 * Return the steps
 	 * 
@@ -98,7 +98,7 @@ public class Direction {
 	}
 
 
-	
+
 	/**
 	 * This function takes a string and returns it with a line break
 	 * at each "intersections" word. It's use when we calculate the steps.
@@ -168,7 +168,7 @@ public class Direction {
 		String latLonAddressArrival = secondAddress.getLongitude() + "," + secondAddress.getLatitude();
 
 		DirectionsApi api = new DirectionsApi(defaultClient);
-		
+
 		DirectionsDirections response = api.directions(latLonAddressDeparture + ";" + latLonAddressArrival, null, null,
 				null, null, null, null, "true", null, null, "simplified", null);
 		List<DirectionsDirectionsRoutes> routes = response.getRoutes();
