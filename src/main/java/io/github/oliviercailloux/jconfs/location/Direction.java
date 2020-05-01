@@ -141,20 +141,6 @@ public class Direction {
 	}
 
 	/**
-	 * This method create an ApiClient and connect it to to the API with our key
-	 * 
-	 * @return ApiClient
-	 */
-
-	public ApiClient connexion() {
-		ApiClient defaultClient = Configuration.getDefaultApiClient();
-		defaultClient.setBasePath("https://eu1.locationiq.com/v1");
-		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
-		key.setApiKey("d4b9a23eaef07d"); // here our key
-		return defaultClient;
-	}
-
-	/**
 	 * This function calculates the time and distance as well as the steps to move
 	 * between the two departure and arrival address converted to latitude and longitude
 	 * 
@@ -162,7 +148,7 @@ public class Direction {
 	 */
 	public void getDirection() throws ApiException {
 
-		ApiClient defaultClient = this.connexion();
+		ApiClient defaultClient = TranslationAddress.connexion();
 
 		String latLonAddressDeparture = firstAddress.getLongitude() + "," + firstAddress.getLatitude();
 		String latLonAddressArrival = secondAddress.getLongitude() + "," + secondAddress.getLatitude();

@@ -194,7 +194,7 @@ public class TranslationAddress {
 	 * @return ApiClient defaultClient
 	 */
 
-	public ApiClient connexion() {
+	public static ApiClient connexion() {
 		ApiClient defaultClient = Configuration.getDefaultApiClient();
 		defaultClient.setBasePath("https://eu1.locationiq.com/v1");
 		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
