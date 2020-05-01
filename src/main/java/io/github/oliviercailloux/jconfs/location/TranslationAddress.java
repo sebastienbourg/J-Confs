@@ -9,10 +9,10 @@ import java.util.Set;
 
 import com.locationiq.client.api.*;
 
-import LocationIq.ApiClient;
-import LocationIq.ApiException;
-import LocationIq.Configuration;
-import LocationIq.auth.ApiKeyAuth;
+import com.locationiq.client.ApiClient;
+import com.locationiq.client.ApiException;
+import com.locationiq.client.Configuration;
+import com.locationiq.client.auth.ApiKeyAuth;
 
 /**
  * 
@@ -123,10 +123,9 @@ public class TranslationAddress {
 		 * Instantiate attribute addressFound
 		 * 
 		 * @return this
-		 * @throws ApiException
 		 */
 
-		public TranslationAddressBuilder addressFound() throws ApiException {
+		public TranslationAddressBuilder addressFound() {
 			this.translationAddress.recoveryAddressFound();
 			this.translationAddress.addressProposal();
 			return this;
@@ -193,10 +192,9 @@ public class TranslationAddress {
 	 * This method allows connection to LocationIQ and its database.
 	 * 
 	 * @return ApiClient defaultClient
-	 * @throws ApiException
 	 */
 
-	public ApiClient connexion() throws ApiException {
+	public ApiClient connexion() {
 		ApiClient defaultClient = Configuration.getDefaultApiClient();
 		defaultClient.setBasePath("https://eu1.locationiq.com/v1");
 		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");

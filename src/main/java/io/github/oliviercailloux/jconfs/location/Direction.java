@@ -1,13 +1,13 @@
 package io.github.oliviercailloux.jconfs.location;
 
-import LocationIq.ApiClient;
-import LocationIq.ApiException;
+import com.locationiq.client.ApiClient;
+import com.locationiq.client.ApiException;
 import java.math.BigDecimal;
 import com.locationiq.client.api.DirectionsApi;
 import java.util.Iterator;
 import java.util.List;
-import LocationIq.Configuration;
-import LocationIq.auth.*;
+import com.locationiq.client.Configuration;
+import com.locationiq.client.auth.*;
 import com.locationiq.client.model.*;
 
 /**

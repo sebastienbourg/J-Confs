@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import LocationIq.ApiException;
+import com.locationiq.client.ApiException;
 
 class TestDirection {
 
