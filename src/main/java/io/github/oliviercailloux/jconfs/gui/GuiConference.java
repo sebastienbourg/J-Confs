@@ -38,8 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import io.github.oliviercailloux.geocode.GeoName;
-import io.github.oliviercailloux.geocode.ReverseGeoCode;
 import io.github.oliviercailloux.jconfs.conference.Conference;
 import io.github.oliviercailloux.jconfs.conference.ConferenceWriter;
 import io.github.oliviercailloux.jconfs.document.GenerateOM;
