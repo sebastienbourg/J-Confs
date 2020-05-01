@@ -11,11 +11,12 @@ import com.locationiq.client.auth.*;
 import com.locationiq.client.model.*;
 
 /**
+ * This class allows to calculate the distance and the
+ * duration between two places defined by address (convert to lattitude, longitude).
+ * It define the steps to go to the destination. The units are meter and second, and
+ * the steps are a string
  * 
- * @author Anis HAMOUNI this class allows to calculate the distance and the
- *         duration between two places defined by (longitude, latitude) and also
- *         the steps to go to the destination. the units are meter and second,
- *         the steps are a string
+ * @author Anis HAMOUNI & Sébastien BOURG
  */
 public class Direction {
 	private String addressDeparture;
@@ -28,14 +29,14 @@ public class Direction {
 
 	/**
 	 * 
-	 * @param dep   string of format longitude,latitude example "2.287592,48.862725"
-	 * @param arriv string of format longitude,latitude example "2.3488,48.85341
-	 *              steps is a string that contains all steps to go on our
-	 *              destination
+	 * static factory method to build a direction instance
+	 * 
+	 * @param dep string address, example : "13 Rue Cloche Percé, 75004 Paris"
+	 * @param arriv string address, example : "Avenue du général de gaulle, 92800 puteaux"
+	 *           
 	 * @throws ApiException
 	 * 
 	 */
-
 	public static Direction given(String dep, String arriv) throws ApiException {
 		return new Direction(dep, arriv);
 	}
@@ -51,72 +52,86 @@ public class Direction {
 				.addressInformations(this.addressArrival).addressFound().latitude().longitude().get();
 	}
 
+	/**
+	 * Return the duration in second 
+	 * 
+	 * @return duration
+	 */
 	public BigDecimal getDuration() {
 		return duration;
 	}
-
+	
+	/**
+	 * Return the distance in meters 
+	 * 
+	 * @return distance
+	 */
 	public BigDecimal getDistance() {
 		return distance;
 	}
-
-	public void setDuration(BigDecimal duree) {
-		this.duration = duree;
-	}
-
-	public void setDistance(BigDecimal dist) {
-		this.distance = dist;
-	}
-
+	
+	/**
+	 * Return the departure address 
+	 * 
+	 * @return addressDeparture
+	 */
 	public String getDeparture() {
 		return this.addressDeparture;
 	}
 
+	/**
+	 * Return the departure address 
+	 * 
+	 * @return addressDeparture
+	 */
 	public String getArrival() {
 		return this.addressArrival;
 	}
-
-	public void setDeparture(String dep) {
-		this.addressDeparture = dep;
-	}
-
-	public void setArrivQL(String arr) {
-		this.addressArrival = arr;
-	}
-
+	
+	/**
+	 * Return the steps
+	 * 
+	 * @return steps
+	 */
 	public String getSteps() {
 		return this.steps;
 	}
 
+
+	
 	/**
+	 * This function takes a string and returns it with a line break
+	 * at each "intersections" word. It's use when we calculate the steps.
 	 * 
-	 * @param o String this function takes a string and returns it with a line break
-	 *          at each "intersections" word. it used when we calculate the steps
+	 * @param s String 
+	 * 
 	 */
-	private String indentedStringOnIntersect(String o) {
-		if (o == null) {
+	private String indentedStringOnIntersect(String s) {
+		if (s == null) {
 			return "null";
 		}
-		return o.replaceAll("intersections=", "\n intersections= \n");
+		return s.replaceAll("intersections=", "\n intersections= \n");
 	}
 
 	/**
+	 * This function removes the geometry information in the steps
+	 * because it's not currently use.
+	 * @param s String 
 	 * 
-	 * @param o String this function removes the geometry information in the steps
-	 *          because it is useless
 	 */
-	private String indentedStringGeometry(String o) {
-		if (o == null) {
+	private String indentedStringGeometry(String s) {
+		if (s == null) {
 			return "null";
 		}
-		return o.replaceAll(
+		return s.replaceAll(
 				"geometry=[^,]++,|out=[^,]++,|in=[^,]++,|entry=\\[[^\\]]++\\],|bearings=\\[[^\\]]++\\]}?\\]?,", "");
 	}
 
 	/**
-	 * 
-	 * @param o
-	 * @this function takes a string and returns it with a line break at each "out"
-	 *       word.
+	 * This function takes a string and returns it with a line 
+	 *  break at each "out" word.
+	 * @param s String
+	 *
 	 */
 	private String indentedStringOut(String o) {
 		if (o == null) {
@@ -126,7 +141,7 @@ public class Direction {
 	}
 
 	/**
-	 * this method create an ApiClient and connect it to to the API with our key
+	 * This method create an ApiClient and connect it to to the API with our key
 	 * 
 	 * @return ApiClient
 	 */
@@ -140,8 +155,8 @@ public class Direction {
 	}
 
 	/**
-	 * this function calculates the time and distance as well as the steps to move
-	 * between the two attributes of the class which are coordinates of localisation
+	 * This function calculates the time and distance as well as the steps to move
+	 * between the two departure and arrival address converted to latitude and longitude
 	 * 
 	 * @throws ApiException
 	 */
@@ -153,10 +168,7 @@ public class Direction {
 		String latLonAddressArrival = secondAddress.getLongitude() + "," + secondAddress.getLatitude();
 
 		DirectionsApi api = new DirectionsApi(defaultClient);
-		/**
-		 * the format of the coordinate must be a String of { longitude,latitude;
-		 * longitude,latitude}
-		 */
+		
 		DirectionsDirections response = api.directions(latLonAddressDeparture + ";" + latLonAddressArrival, null, null,
 				null, null, null, null, "true", null, null, "simplified", null);
 		List<DirectionsDirectionsRoutes> routes = response.getRoutes();
