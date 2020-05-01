@@ -17,7 +17,7 @@ import com.locationiq.client.ApiException;
 class TestTranslationAddress {
 
 	/**
-	 * this method test the creation of an adress
+	 * this method test the creation of an address
 	 * 
 	 * @throws ApiException
 	 */
@@ -26,7 +26,7 @@ class TestTranslationAddress {
 	public final void creatInstanceTest() throws ApiException {
 		TranslationAddress t = TranslationAddress.newInstance();
 		assertEquals(null, t.getLatitude());
-		assertEquals(0, t.getAdressInformations().size());
+		assertEquals(0, t.getAddressInformations().size());
 	}
 
 	/**
@@ -34,35 +34,33 @@ class TestTranslationAddress {
 	 * autocomplete method of LocationIQ
 	 * 
 	 * @throws LocationIq.ApiException
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 
-	
-	  @Test 
-	  public final void recoveryAddressInformationsTest() throws LocationIq.ApiException, InterruptedException { 
-		  TranslationAddress t =TranslationAddress.newInstance();
-		  t.recoveryAddressInformations("Université paris dauphine"); 
-		  TimeUnit.SECONDS.sleep(1);
-		  boolean test =(t.getAdressInformations().size() > 2);
-		  assertEquals(true, test); 
-	  }
-	 
+	@Test
+	public final void recoveryAddressInformationsTest() throws LocationIq.ApiException, InterruptedException {
+		TranslationAddress t = TranslationAddress.newInstance();
+		TimeUnit.SECONDS.sleep(1);
+		t.recoveryAddressInformations("Université paris dauphine");
+		boolean test = (t.getAddressInformations().size() > 2);
+		assertEquals(true, test);
+	}
 
 	/**
 	 * This method tests the recovery of several addresses informations associated
 	 * with a search.
 	 * 
 	 * @throws LocationIq.ApiException
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 
 	@Test
 	public final void recoveryAddressFoundTest() throws LocationIq.ApiException, InterruptedException {
 		TranslationAddress t = TranslationAddress.newInstance();
-		t.recoveryAddressInformations("1, Place du Maréchal de Lattre de Tassigny");
+		t.recoveryAddressInformations("Université paris dauphine");
 		TimeUnit.SECONDS.sleep(1);
 		t.recoveryAddressFound();
-		boolean test = (t.getAdressFound().size() > 2);
+		boolean test = (t.getAddressFound().size() > 2);
 		assertEquals(true, test);
 	}
 
@@ -73,10 +71,9 @@ class TestTranslationAddress {
 	 */
 
 	@Test
-	public final void builder() throws LocationIq.ApiException {
+	public final void builderTest() throws LocationIq.ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("Université paris dauphine").addressFound().latitude().longitude()
-				.get();
+				.addressInformations("Avenue jean rostand domont 95330").addressFound().latitude().longitude().get();
 	}
 
 	/**
@@ -86,14 +83,13 @@ class TestTranslationAddress {
 	 */
 
 	@Test
-	public final void latitudeLongitude() throws LocationIq.ApiException {
+	public final void latitudeLongitudeTest() throws LocationIq.ApiException {
 		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("Université paris dauphine").addressFound().latitude().longitude()
-				.get();
+				.addressInformations("Avenue jean rostand domont 95330").addressFound().latitude().longitude().get();
 		System.out.println(address.getLatitude());
 		System.out.println(address.getLongitude());
-		assertEquals("48.87015115", address.getLatitude());
-		assertEquals("2.2735218497104", address.getLongitude());
+		assertEquals("49.0327146", address.getLatitude());
+		assertEquals("2.3425254", address.getLongitude());
 	}
 
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-//import com.locationiq.client.Configuration;
 import com.locationiq.client.api.*;
 
 import LocationIq.ApiClient;
@@ -176,7 +175,7 @@ public class TranslationAddress {
 	 * @return adressInformations
 	 */
 
-	public ArrayList<String> getAdressInformations() {
+	public ArrayList<String> getAddressInformations() {
 		return addressInformations;
 	}
 
@@ -186,7 +185,7 @@ public class TranslationAddress {
 	 * @return adressFound
 	 */
 
-	public ArrayList<String> getAdressFound() {
+	public ArrayList<String> getAddressFound() {
 		return addressFound;
 	}
 
@@ -247,7 +246,7 @@ public class TranslationAddress {
 				cpt++;
 			}
 		} else {
-			System.out.println("La seule adresse est trouvée est: " + i.next());
+			System.out.println("The only address found is: " + i.next());
 			return true;
 		}
 		return false;
@@ -255,11 +254,11 @@ public class TranslationAddress {
 	}
 
 	/**
-	 * This method modifies the contents of the ArrayList adressInformations to make
-	 * it more readable and to be able to apply different methods more easily. It
-	 * also makes it possible to retrieve all the addresses found by autocomplete,
-	 * to store them in adressFound. It allows the selection of the address that the
-	 * user wants.
+	 * This method modifies the contents of the ArrayList addressInformations to
+	 * make it more readable and to be able to apply different methods more easily.
+	 * It also makes it possible to retrieve all the addresses found by
+	 * autocomplete, to store them in addressFound. It allows the selection of the
+	 * address that the user wants.
 	 */
 
 	public void recoveryAddressFound() {
@@ -286,8 +285,8 @@ public class TranslationAddress {
 	 */
 
 	public void addressProposal() {
-		boolean displayall = this.displayFoundAddress(this.getAdressFound());
-		if(displayall==false) {
+		boolean displayall = this.displayFoundAddress(this.getAddressFound());
+		if (displayall == false) {
 			String address = this.selectionAddressProposal();
 			for (int i = 0; i < this.addressFound.size(); i++) {
 				if (!address.equals(this.addressFound.get(i))) {
@@ -296,16 +295,14 @@ public class TranslationAddress {
 					i--;
 				}
 			}
-		}
-		else {
-			for(int i = 1 ; i < this.addressFound.size(); i++ ) {
+		} else {
+			for (int i = 1; i < this.addressFound.size(); i++) {
 				this.addressFound.remove(i);
 				this.addressInformations.remove(i);
 				i--;
 			}
 		}
-		
-		
+
 	}
 
 	/**
@@ -346,14 +343,5 @@ public class TranslationAddress {
 		int posArr = this.addressInformations.get(0).indexOf(", boundingbox=");
 		String add = this.addressInformations.get(0).substring(posDep + search.length(), posArr);
 		this.longitude = add;
-	}
-
-	public static void main(String[] args) throws ApiException {
-		TranslationAddress address = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations("76 avenue jean rostand domont 95330").addressFound().latitude().longitude()
-				.get();
-		System.out.println(address.getAdressInformations().size());
-		System.out.println(address.getLatitude());
-		System.out.println(address.getLongitude());
 	}
 }

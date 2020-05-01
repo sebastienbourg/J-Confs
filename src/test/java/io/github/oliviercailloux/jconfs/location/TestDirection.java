@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import LocationIq.ApiException;
 
 class TestDirection {
-	
+
 	/**
 	 * 
-	 * Unit test in order to verify the good get of distance and duration
-	 * Carreful this test depend on API calculation so it might fail in the future
+	 * Unit test in order to verify the good get of distance and duration Carreful
+	 * this test depend on API calculation so it might fail in the future
 	 * 
 	 * @throws ApiException
 	 * @throws InterruptedException

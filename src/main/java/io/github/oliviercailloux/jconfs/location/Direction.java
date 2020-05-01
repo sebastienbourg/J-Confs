@@ -28,12 +28,11 @@ public class Direction {
 
 	/**
 	 * 
-	 * @param dep
-	 *            string of format longitude,latitude example "2.287592,48.862725"
-	 * @param arriv
-	 *            string of format longitude,latitude example "2.3488,48.85341 steps
-	 *            is a string that contains all steps to go on our destination
-	 * @throws ApiException 
+	 * @param dep   string of format longitude,latitude example "2.287592,48.862725"
+	 * @param arriv string of format longitude,latitude example "2.3488,48.85341
+	 *              steps is a string that contains all steps to go on our
+	 *              destination
+	 * @throws ApiException
 	 * 
 	 */
 
@@ -47,11 +46,9 @@ public class Direction {
 		this.duration = distance = BigDecimal.ZERO;
 		this.steps = "";
 		this.firstAddress = TranslationAddress.TranslationAddressBuilder.build()
-							.addressInformations(this.addressDeparture).addressFound().latitude().longitude()
-							.get();
+				.addressInformations(this.addressDeparture).addressFound().latitude().longitude().get();
 		this.secondAddress = TranslationAddress.TranslationAddressBuilder.build()
-				.addressInformations(this.addressArrival).addressFound().latitude().longitude()
-				.get();
+				.addressInformations(this.addressArrival).addressFound().latitude().longitude().get();
 	}
 
 	public BigDecimal getDuration() {
@@ -92,10 +89,8 @@ public class Direction {
 
 	/**
 	 * 
-	 * @param o
-	 *            String this function takes a string and returns it with a line
-	 *            break at each "intersections" word. it used when we calculate the
-	 *            steps
+	 * @param o String this function takes a string and returns it with a line break
+	 *          at each "intersections" word. it used when we calculate the steps
 	 */
 	private String indentedStringOnIntersect(String o) {
 		if (o == null) {
@@ -106,9 +101,8 @@ public class Direction {
 
 	/**
 	 * 
-	 * @param o
-	 *            String this function removes the geometry information in the steps
-	 *            because it is useless
+	 * @param o String this function removes the geometry information in the steps
+	 *          because it is useless
 	 */
 	private String indentedStringGeometry(String o) {
 		if (o == null) {
@@ -154,18 +148,17 @@ public class Direction {
 	public void getDirection() throws ApiException {
 
 		ApiClient defaultClient = this.connexion();
-		
+
 		String latLonAddressDeparture = firstAddress.getLongitude() + "," + firstAddress.getLatitude();
 		String latLonAddressArrival = secondAddress.getLongitude() + "," + secondAddress.getLatitude();
-		
 
 		DirectionsApi api = new DirectionsApi(defaultClient);
 		/**
 		 * the format of the coordinate must be a String of { longitude,latitude;
 		 * longitude,latitude}
 		 */
-		DirectionsDirections response = api.directions(latLonAddressDeparture + ";" + latLonAddressArrival, null, null, null, null, null, null,
-				"true", null, null, "simplified", null);
+		DirectionsDirections response = api.directions(latLonAddressDeparture + ";" + latLonAddressArrival, null, null,
+				null, null, null, null, "true", null, null, "simplified", null);
 		List<DirectionsDirectionsRoutes> routes = response.getRoutes();
 		Iterator<DirectionsDirectionsRoutes> i = routes.iterator();
 		while (i.hasNext()) {
