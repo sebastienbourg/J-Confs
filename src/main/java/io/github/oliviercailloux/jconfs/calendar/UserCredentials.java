@@ -13,9 +13,10 @@ public class UserCredentials
 	private String username;
 	private String password;
 	private String calendarId;
-
+	private String path;
 	
 	public UserCredentials() throws IOException {
+		this.path="./src/main/resources/Config.txt";
 		this.readFile();
 	}
 	public String getUsername() {
@@ -27,24 +28,24 @@ public class UserCredentials
 	public String getCalendarId() {
 		return calendarId;
 	}
-
+	public void setPath(String a) {
+		this.path= a;
+	}
 	public void readFile() throws IOException {	  
 		
 		String a = "";
-
-		final Path infile = Path.of("./src/main/resources/Config.txt");
+		final Path infile = Path.of(this.path.toString());
 		try (InputStream is = Files.newInputStream(infile)) {
 			is.readAllBytes();
 			a = Files.readString(infile); 
-			System.out.println(a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length()-1));
-			System.out.println(a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length()-1));
-			System.out.println(a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length()-1));
+			
 
 		}
 
 		this.username = a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length()-1);
 		this.password = a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length()-1);
 		this.calendarId = a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length()-1);
+		System.out.println(this.username);
 	}
 
 

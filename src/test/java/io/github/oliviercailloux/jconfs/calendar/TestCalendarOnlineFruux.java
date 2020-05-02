@@ -39,7 +39,9 @@ public class TestCalendarOnlineFruux {
 	public void testGetOnlineConferenceFromUid()
 			throws Exception {
 
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials userFruux = new UserCredentials();
+		userFruux.setPath("./../main/resources/ConfigTestFruux.txt");
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		String uidSearch = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
 		Optional<Conference> potentialConference;
 		potentialConference = instanceCalendarOnline.getConferenceFromUid(uidSearch);
@@ -61,7 +63,9 @@ public class TestCalendarOnlineFruux {
 	public void testGetAllOnlineConferences()
 			throws Exception {
 
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials userFruux = new UserCredentials();
+		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		Set<Conference> collectionConferences = instanceCalendarOnline.getOnlineConferences();
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
 		while (iteratorConf.hasNext()) {
@@ -73,7 +77,9 @@ public class TestCalendarOnlineFruux {
 	@Test
 	public void testConferenceToVEvent() throws Exception {
 		VEvent conferenceVEvent;
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials userFruux = new UserCredentials();
+		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		URL url = new URL("http://fruux.com");
 		String city = "Paris";
 		String country = "France";
@@ -107,7 +113,9 @@ public class TestCalendarOnlineFruux {
 
 	@Test
 	public void testAddOnlineConference() throws Exception {
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials userFruux = new UserCredentials();
+		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		LocalDate start_ = null;
 		LocalDate end_ = null;
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
@@ -130,7 +138,9 @@ public class TestCalendarOnlineFruux {
 	@Test
 	public void testDelete() throws Exception {
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials userFruux = new UserCredentials();
+		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());
 		if(instanceCalendarOnline.getConferenceFromUid(uid).isPresent()) {

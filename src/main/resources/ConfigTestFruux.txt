@@ -1,0 +1,3 @@
+username = b3297431258
+password = jizbr5fuj9gi
+calendarId = 6e8c6372-eba5-43da-9eed-8e5413559c99
