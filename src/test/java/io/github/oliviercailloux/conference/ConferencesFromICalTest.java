@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Set;
@@ -51,8 +51,8 @@ public class ConferencesFromICalTest {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		// TEST 2
-		Set<Conference> setConfTest2 = testConfFromIcal.retrieve(LocalDate.parse("20/10/2000", formatter),
-				LocalDate.parse("20/10/2020", formatter));
+		Set<Conference> setConfTest2 = testConfFromIcal.retrieve(Instant.parse("2020-07-25T16:22:52.966Z"),
+				Instant.parse("2020-07-25T16:22:52.966Z"));
 		assertEquals(2, setConfTest2.size());
 		LOGGER.debug("setConfTest2 size is 2");
 		Iterator<Conference> iteratorTest = setConfTest2.iterator();

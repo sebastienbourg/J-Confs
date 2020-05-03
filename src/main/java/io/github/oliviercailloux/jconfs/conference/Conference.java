@@ -2,7 +2,7 @@ package io.github.oliviercailloux.jconfs.conference;
 
 import java.net.URL;
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
@@ -16,9 +16,9 @@ public class Conference {
 	private URL url;
 	private String uid;
 	private String title;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private Double registrationFee;
+	private Instant startDate;
+	private Instant endDate;
+	private double registrationFee;
 	private String country;
 	private String city;
 
@@ -34,7 +34,7 @@ public class Conference {
 	 * @param country
 	 * @param city
 	 */
-	public Conference(String uid, URL url, String title, LocalDate startDate, LocalDate endDate, Double registrationFee,
+	public Conference(String uid, URL url, String title, Instant startDate, Instant endDate, double registrationFee,
 			String country, String city) {
 		Objects.requireNonNull(endDate);
 		Objects.requireNonNull(startDate);
@@ -71,7 +71,7 @@ public class Conference {
 	 * 
 	 * @return not <code>null</code>
 	 */
-	public LocalDate getStartDate() {
+	public Instant getStartDate() {
 		return startDate;
 	}
 
@@ -80,7 +80,7 @@ public class Conference {
 	 * 
 	 * @return not <code>null</code>
 	 */
-	public LocalDate getEndDate() {
+	public Instant getEndDate() {
 		return endDate;
 	}
 
@@ -89,7 +89,7 @@ public class Conference {
 	 * 
 	 * @return registrationFee
 	 */
-	public Double getFeeRegistration() {
+	public double getFeeRegistration() {
 		return registrationFee;
 	}
 
@@ -127,7 +127,7 @@ public class Conference {
 
 			if (title.equals(conference2.title) && url.equals(conference2.url)
 					&& startDate.equals(conference2.startDate) && endDate.equals(conference2.endDate)
-					&& registrationFee.equals(conference2.registrationFee) && city.equals(conference2.city)
+					&& registrationFee == (conference2.registrationFee) && city.equals(conference2.city)
 					&& country.equals(conference2.country)) {
 				return true;
 			}

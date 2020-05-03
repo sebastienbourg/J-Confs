@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.io.FileInputStream;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
@@ -60,10 +60,10 @@ public class ReadCalendarFiles {
 	 * format
 	 * 
 	 * @param date
-	 * @return LocalDate
+	 * @return Instant
 	 */
-	public static LocalDate stringToLocalDate(String date) {
-		return LocalDate.parse(date);
+	public static Instant stringToInstant(String date) {
+		return Instant.parse(date);
 	}
 
 	/**
@@ -96,13 +96,13 @@ public class ReadCalendarFiles {
 			String startDate = confCompo.getProperty("DTSTART").getValue();
 			String endDate = confCompo.getProperty("DTEND").getValue();
 			String city = confCompo.getProperty("CITY").getValue();
-			LocalDate start = null;
-			LocalDate end = null;
+			Instant start = null;
+			Instant end = null;
 
 			try {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				start = LocalDate.parse(startDate, formatter);
-				end = LocalDate.parse(endDate, formatter);
+				start = Instant.parse(startDate.replace('/', '-'));
+				end = Instant.parse(endDate.replace('/', '-'));
 			} catch (Exception e) {
 				throw new IllegalArgumentException("Date impossible to put in the conference", e);
 			}

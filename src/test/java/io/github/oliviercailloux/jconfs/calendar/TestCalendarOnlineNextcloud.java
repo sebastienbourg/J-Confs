@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Optional;
@@ -51,7 +51,7 @@ public class TestCalendarOnlineNextcloud {
 			assertEquals("Paris",conferenceFound.getCity());
 			assertEquals("France",conferenceFound.getCountry());
 			assertEquals("2020-04-28",conferenceFound.getStartDate().toString());
-			assertEquals("1.36",conferenceFound.getFeeRegistration().toString());
+			assertEquals("1.36",conferenceFound.getFeeRegistration()+"");
 		}
 		else {
 			fail(new NullPointerException());
@@ -78,18 +78,18 @@ public class TestCalendarOnlineNextcloud {
 		URL url = new URL("http://fruux.com");
 		String city = "Paris";
 		String country = "France";
-		String endDate = "08/08/2019";
+		String endDate = "2020-05-27T16:22:52.966Z";
 		Double feeRegistration = 1.36;
-		String startDate = "06/08/2019";
+		String startDate = "2020-05-25T16:22:52.966Z";
 		String title = "Java formation";
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
-		LocalDate start = null;
-		LocalDate end = null;
+		Instant start = null;
+		Instant end = null;
 
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start = LocalDate.parse(startDate, formatter);
-			end = LocalDate.parse(endDate, formatter);
+			start = Instant.parse(startDate);
+			end = Instant.parse(endDate);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
@@ -109,13 +109,13 @@ public class TestCalendarOnlineNextcloud {
 	@Test
 	public void testAddOnlineConference() throws Exception {
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
-		LocalDate start = null;
-		LocalDate end = null;
+		Instant start = null;
+		Instant end = null;
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start = LocalDate.parse("06/08/2019", formatter);
-			end = LocalDate.parse("08/08/2019", formatter);
+			start = Instant.parse("2020-05-25T16:22:52.966Z");
+			end = Instant.parse("2020-05-27T16:22:52.966Z");
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
