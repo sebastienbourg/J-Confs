@@ -1,6 +1,8 @@
 package io.github.oliviercailloux.jconfs.calendar;
 
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -69,6 +71,7 @@ public class CalendarBuilder {
 	protected CalDAVCollection collectionCalendarsOnline;
 	protected static int port=443;
 	protected String postUrl;
+	
 	public static CalendarBuilder given(String url, String postUrl, UserCredentials user) {
 		return new CalendarBuilder(url, user.getUsername(), user.getPassword(), user.getCalendarId(), postUrl) ;
 	}
@@ -99,43 +102,27 @@ public class CalendarBuilder {
 	
 	
 	public static void main(String args[]) throws CalDAV4JException, URISyntaxException, ParseException, InvalidConferenceFormatException, IOException {
-		UserCredentials a = new UserCredentials();
-		a.readFile();
-		CalendarBuilder b = given("ppp.woelkli.com", "/remote.php/dav", a) ;
-		CalendarOnline c = new CalendarOnline(b) ;
-		LocalDate start = null;
-
-		 LocalDate end = null;
-
-		 String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
-
-		 try {
-
-		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-		 start = LocalDate.parse("28/04/2020", formatter);
-
-		 end = LocalDate.parse("29/04/2020", formatter);
-
-		 } catch (Exception e) {
-
-		 throw new IllegalArgumentException("Date impossible to put in the conference", e);
-
+		UserCredentials userFruux = new UserCredentials();
+		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		userFruux.readFile();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
+		LocalDate start_ = null;
+		LocalDate end_ = null;
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			start_ = LocalDate.parse("06/08/2019", formatter);
+			end_ = LocalDate.parse("08/08/2019", formatter);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
-
-		 Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation", start, end, 1.36,
-
-		 "France", "Paris");
-
-		 c.addOnlineConference(conference);
-		 
-		 
-		 Set<Conference> var = c.getOnlineConferences();
-		 for (Conference calendar : var) {
-
-			 System.out.println(calendar.toString());
-
-			}
+		Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation", start_, end_, 1.36,
+				"France", "Paris");
+		instanceCalendarOnline.addOnlineConference(conference);
+		Optional<Conference> confTest = instanceCalendarOnline.getConferenceFromUid(uid);
+		if(!confTest.isPresent()) {
+			fail();
+		}
 	}
 
 

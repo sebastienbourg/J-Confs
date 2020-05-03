@@ -40,18 +40,19 @@ public class TestCalendarOnlineFruux {
 			throws Exception {
 
 		UserCredentials userFruux = new UserCredentials();
-		userFruux.setPath("./../main/resources/ConfigTestFruux.txt");
+		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		userFruux.readFile();
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
-		String uidSearch = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
+		String uidSearch = "b8e5f0dc-5a69-4fd5-bde3-f38e0f986085";
 		Optional<Conference> potentialConference;
 		potentialConference = instanceCalendarOnline.getConferenceFromUid(uidSearch);
 		if (potentialConference.isPresent()) {
 			Conference conferenceFound = potentialConference.get();
-			assertEquals("Java formation",conferenceFound.getTitle());
+			assertEquals("Java presentation",conferenceFound.getTitle());
 			assertEquals(uidSearch,conferenceFound.getUid());
 			assertEquals("Paris",conferenceFound.getCity());
 			assertEquals("France",conferenceFound.getCountry());
-			assertEquals("2020-04-28",conferenceFound.getStartDate().toString());
+			assertEquals("2019-07-01",conferenceFound.getStartDate().toString());
 			assertEquals("1.36",conferenceFound.getFeeRegistration().toString());
 		}
 		else {
@@ -65,6 +66,7 @@ public class TestCalendarOnlineFruux {
 
 		UserCredentials userFruux = new UserCredentials();
 		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		userFruux.readFile();
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		Set<Conference> collectionConferences = instanceCalendarOnline.getOnlineConferences();
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
@@ -79,6 +81,7 @@ public class TestCalendarOnlineFruux {
 		VEvent conferenceVEvent;
 		UserCredentials userFruux = new UserCredentials();
 		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		userFruux.readFile();
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		URL url = new URL("http://fruux.com");
 		String city = "Paris";
@@ -115,6 +118,7 @@ public class TestCalendarOnlineFruux {
 	public void testAddOnlineConference() throws Exception {
 		UserCredentials userFruux = new UserCredentials();
 		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		userFruux.readFile();
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		LocalDate start_ = null;
 		LocalDate end_ = null;
@@ -140,6 +144,7 @@ public class TestCalendarOnlineFruux {
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
 		UserCredentials userFruux = new UserCredentials();
 		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
+		userFruux.readFile();
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
 		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());

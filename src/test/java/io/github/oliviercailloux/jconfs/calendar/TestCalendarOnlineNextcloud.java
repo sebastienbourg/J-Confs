@@ -39,8 +39,9 @@ public class TestCalendarOnlineNextcloud {
 	@Test
 	public void testGetOnlineConferenceFromUid()
 			throws Exception {
-
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials user=new UserCredentials();
+		user.readFile();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
 		String uidSearch = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
 		Optional<Conference> potentialConference;
 		potentialConference = instanceCalendarOnline.getConferenceFromUid(uidSearch);
@@ -62,7 +63,9 @@ public class TestCalendarOnlineNextcloud {
 	public void testGetAllOnlineConferences()
 			throws Exception {
 
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		UserCredentials user=new UserCredentials();
+		user.readFile();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user)); instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		Set<Conference> collectionConferences = instanceCalendarOnline.getOnlineConferences();
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
 		while (iteratorConf.hasNext()) {
@@ -74,8 +77,9 @@ public class TestCalendarOnlineNextcloud {
 	@Test
 	public void testConferenceToVEvent() throws Exception{
 		VEvent conferenceVEvent;
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
-		URL url = new URL("http://fruux.com");
+		UserCredentials user=new UserCredentials();
+		user.readFile();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		URL url = new URL("http://fruux.com");
 		String city = "Paris";
 		String country = "France";
 		String endDate = "08/08/2019";
@@ -108,8 +112,9 @@ public class TestCalendarOnlineNextcloud {
 
 	@Test
 	public void testAddOnlineConference() throws Exception {
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
-		LocalDate start = null;
+		UserCredentials user=new UserCredentials();
+		user.readFile();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		LocalDate start = null;
 		LocalDate end = null;
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
 		try {
@@ -129,8 +134,9 @@ public class TestCalendarOnlineNextcloud {
 	@Test
 	public void testDelete() throws Exception {
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
-		instanceCalendarOnline.deleteOnlineConference(uid);
+		UserCredentials user=new UserCredentials();
+		user.readFile();
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());
 		if(instanceCalendarOnline.getConferenceFromUid(uid).isPresent()) {
 			fail();

@@ -88,7 +88,7 @@ public class CalendarOnline {
 		GenerateQuery searchQuery = new GenerateQuery();
 		CalendarQuery calendarQuery = searchQuery.generate();
 		Set<Conference> listConferencesUser = new LinkedHashSet<>();
-		List<Calendar> calendarsResult = connector.collectionCalendarsOnline.queryCalendars(this.connector.httpclient, calendarQuery);
+		List<Calendar> calendarsResult = this.connector.collectionCalendarsOnline.queryCalendars(this.connector.httpclient, calendarQuery);
 		
 		for (Calendar calendar : calendarsResult) {
 			try { 

@@ -17,7 +17,7 @@ public class UserCredentials
 	
 	public UserCredentials() throws IOException {
 		this.path="./src/main/resources/Config.txt";
-		this.readFile();
+
 	}
 	public String getUsername() {
 		return username;
@@ -29,7 +29,7 @@ public class UserCredentials
 		return calendarId;
 	}
 	public void setPath(String a) {
-		this.path= a;
+		this.path=a;
 	}
 	public void readFile() throws IOException {	  
 		
@@ -45,7 +45,6 @@ public class UserCredentials
 		this.username = a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length()-1);
 		this.password = a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length()-1);
 		this.calendarId = a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length()-1);
-		System.out.println(this.username);
 	}
 
 
