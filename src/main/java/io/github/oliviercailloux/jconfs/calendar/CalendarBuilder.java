@@ -1,6 +1,5 @@
 package io.github.oliviercailloux.jconfs.calendar;
 
-
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -57,8 +56,8 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Url;
 
 /**
- *  @author machria & sbourg & zanis922
- *  Builder which create the connection with online calendar
+ * @author machria & sbourg & zanis922 Builder which create the connection with
+ *         online calendar
  */
 public class CalendarBuilder {
 	protected String url;
@@ -67,19 +66,20 @@ public class CalendarBuilder {
 	protected String calendarId;
 	protected CredentialsProvider credsProvider = new BasicCredentialsProvider();
 	protected CloseableHttpClient httpclient;
-	protected HttpHost hostTarget;	
+	protected HttpHost hostTarget;
 	protected CalDAVCollection collectionCalendarsOnline;
-	protected static int port=443;
+	protected static int port = 443;
 	protected String postUrl;
-	
+
 	public static CalendarBuilder given(String url, String postUrl, UserCredentials user) {
-		if(user.getUsername()==null||user.getPassword()==null||user.getCalendarId()==null)
+		if (user.getUsername() == null || user.getPassword() == null || user.getCalendarId() == null)
 			throw new IllegalStateException("For UserCredential, you need to use readFiles.");
-		return new CalendarBuilder(url, user.getUsername(), user.getPassword(), user.getCalendarId(), postUrl) ;
+		return new CalendarBuilder(url, user.getUsername(), user.getPassword(), user.getCalendarId(), postUrl);
 	}
 
 	/**
-	 * Constructor for a generic calendar object 
+	 * Constructor for a generic calendar object
+	 * 
 	 * @param url
 	 * @param userName
 	 * @param password
@@ -87,19 +87,20 @@ public class CalendarBuilder {
 	 * @param port
 	 * @param postUrl
 	 */
-	private CalendarBuilder(String url, String userName, String password, String calendarID,String postUrl) {
+	private CalendarBuilder(String url, String userName, String password, String calendarID, String postUrl) {
 		this.url = url;
 		this.username = userName;
 		this.password = password;
 		this.calendarId = calendarID;
-		this.postUrl=postUrl;
+		this.postUrl = postUrl;
 		this.credsProvider = new BasicCredentialsProvider();
 		credsProvider.setCredentials(new AuthScope(this.url, port),
 				new UsernamePasswordCredentials(this.username, this.password));
 		httpclient = HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
 		hostTarget = new HttpHost(this.url, port, "https");
-		collectionCalendarsOnline = new CalDAVCollection(this.postUrl+"/calendars/" + this.username + "/" + this.calendarId,
-				hostTarget, new CalDAV4JMethodFactory(), null);
+		collectionCalendarsOnline = new CalDAVCollection(
+				this.postUrl + "/calendars/" + this.username + "/" + this.calendarId, hostTarget,
+				new CalDAV4JMethodFactory(), null);
 	}
 
 }

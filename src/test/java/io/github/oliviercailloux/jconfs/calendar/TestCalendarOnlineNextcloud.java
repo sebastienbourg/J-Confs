@@ -29,43 +29,41 @@ import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
 
 /**
- *  @author machria & sbourg
- *  Unit tests for connect to a calendar on Nextcloud platform
+ * @author machria & sbourg Unit tests for connect to a calendar on Nextcloud
+ *         platform
  */
 
 public class TestCalendarOnlineNextcloud {
 
-
 	@Test
-	public void testGetOnlineConferenceFromUid()
-			throws Exception {
-		UserCredentials user=new UserCredentials();
+	public void testGetOnlineConferenceFromUid() throws Exception {
+		UserCredentials user = new UserCredentials();
 		user.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
 		String uidSearch = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
 		Optional<Conference> potentialConference;
 		potentialConference = instanceCalendarOnline.getConferenceFromUid(uidSearch);
 		if (potentialConference.isPresent()) {
 			Conference conferenceFound = potentialConference.get();
-			assertEquals("Java formation",conferenceFound.getTitle());
-			assertEquals(uidSearch,conferenceFound.getUid());
-			assertEquals("Paris",conferenceFound.getCity());
-			assertEquals("France",conferenceFound.getCountry());
-			assertEquals("2020-04-28",conferenceFound.getStartDate().toString());
-			assertEquals("1.36",conferenceFound.getFeeRegistration().toString());
-		}
-		else {
+			assertEquals("Java formation", conferenceFound.getTitle());
+			assertEquals(uidSearch, conferenceFound.getUid());
+			assertEquals("Paris", conferenceFound.getCity());
+			assertEquals("France", conferenceFound.getCountry());
+			assertEquals("2020-04-28", conferenceFound.getStartDate().toString());
+			assertEquals("1.36", conferenceFound.getFeeRegistration().toString());
+		} else {
 			fail(new NullPointerException());
 		}
 	}
 
 	@Test
-	public void testGetAllOnlineConferences()
-			throws Exception {
+	public void testGetAllOnlineConferences() throws Exception {
 
-		UserCredentials user=new UserCredentials();
+		UserCredentials user = new UserCredentials();
 		user.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user)); 
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
 		Set<Conference> collectionConferences = instanceCalendarOnline.getOnlineConferences();
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
 		while (iteratorConf.hasNext()) {
@@ -75,11 +73,13 @@ public class TestCalendarOnlineNextcloud {
 	}
 
 	@Test
-	public void testConferenceToVEvent() throws Exception{
+	public void testConferenceToVEvent() throws Exception {
 		VEvent conferenceVEvent;
-		UserCredentials user=new UserCredentials();
+		UserCredentials user = new UserCredentials();
 		user.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		URL url = new URL("http://fruux.com");
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
+		URL url = new URL("http://fruux.com");
 		String city = "Paris";
 		String country = "France";
 		String endDate = "08/08/2019";
@@ -112,11 +112,13 @@ public class TestCalendarOnlineNextcloud {
 
 	@Test
 	public void testAddOnlineConference() throws Exception {
-		UserCredentials user=new UserCredentials();
+		UserCredentials user = new UserCredentials();
 		user.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		LocalDate start = null;
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
+		LocalDate start = null;
 		LocalDate end = null;
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee69";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			start = LocalDate.parse("06/08/2019", formatter);
@@ -133,12 +135,14 @@ public class TestCalendarOnlineNextcloud {
 
 	@Test
 	public void testDelete() throws Exception {
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
-		UserCredentials user=new UserCredentials();
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee69";
+		UserCredentials user = new UserCredentials();
 		user.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		instanceCalendarOnline.deleteOnlineConference(uid);
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));
+		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());
-		if(instanceCalendarOnline.getConferenceFromUid(uid).isPresent()) {
+		if (instanceCalendarOnline.getConferenceFromUid(uid).isPresent()) {
 			fail();
 		}
 	}
