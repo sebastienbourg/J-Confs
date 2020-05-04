@@ -2,7 +2,7 @@ package io.github.oliviercailloux.jconfs.conference;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.Set;
 
 import net.fortuna.ical4j.data.ParserException;
@@ -33,7 +33,7 @@ public interface ConferencesRetriever {
 	 *         found
 	 * @throws InvalidConferenceFormatException
 	 */
-	public Set<Conference> retrieve(LocalDate minDate, LocalDate maxDate)
+	public Set<Conference> retrieve(Instant minDate, Instant maxDate)
 			throws IOException, ParserException, InvalidConferenceFormatException;
 
 	/**

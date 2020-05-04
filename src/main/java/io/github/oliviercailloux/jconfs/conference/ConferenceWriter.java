@@ -105,14 +105,14 @@ public class ConferenceWriter {
 		PropertyList<Property> propertyList = new PropertyList<>();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		propertyList.add(new XProperty("X-DTSTART", conference.getStartDate().format(formatter)));
-		propertyList.add(new XProperty("X-DTEND", conference.getEndDate().format(formatter)));
+		propertyList.add(new XProperty("X-DTSTART", formatter.format(conference.getStartDate())));
+		propertyList.add(new XProperty("X-DTEND", formatter.format(conference.getEndDate())));
 
 		propertyList.add(new Summary(conference.getTitle()));
 		propertyList.add(new XProperty("X-COUNTRY", conference.getCountry().toString()));
 		propertyList.add(new XProperty("X-CITY", conference.getCity().toString()));
 		propertyList.add(new Url(conference.getUrl().toURI()));
-		propertyList.add(new XProperty("X-FEE", conference.getFeeRegistration().toString()));
+		propertyList.add(new XProperty("X-FEE", conference.getFeeRegistration()+""));
 
 		XComponent meeting = new XComponent("X-CONFERENCE", propertyList);
 		// add event to the calendar

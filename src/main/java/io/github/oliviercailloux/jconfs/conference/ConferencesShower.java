@@ -3,7 +3,7 @@ package io.github.oliviercailloux.jconfs.conference;
 import java.io.IOException;
 
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -101,15 +101,16 @@ public class ConferencesShower {
 
 	public Set<Conference> conferencesFiltredByDate()
 			throws InvalidConferenceFormatException, IOException, ParserException {
-		LocalDate minDate;
-		LocalDate maxDate;
+		Instant minDate;
+		Instant maxDate;
 		try (Scanner sc = new Scanner(System.in)) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 			System.out.println("Please enter the minimale date dd/MM/yyyy format");
-			minDate = LocalDate.parse(sc.nextLine(), formatter);
+			minDate = Instant.parse(sc.nextLine().replace('/','-')+ "T16:22:52.966Z");
 			System.out.println("Please enter the maximale date dd/MM/yyyy format ");
-			maxDate = LocalDate.parse(sc.nextLine(), formatter);
+			maxDate = Instant.parse(sc.nextLine().replace('/','-')+ "T16:22:52.966Z");
+			
 
 			if (!minDate.isBefore(maxDate))
 				throw new IllegalArgumentException("minDate must be before maxDate");

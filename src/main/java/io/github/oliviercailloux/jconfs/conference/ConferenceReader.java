@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -85,13 +86,13 @@ public class ConferenceReader {
 		String stringDTSTART = convertDate(confCompo.getProperty("DTSTART").getValue());
 		String stringDTEND = convertDate(confCompo.getProperty("DTEND").getValue());
 		String uid = confCompo.getProperty("UID").getValue();
-		LocalDate start = null;
-		LocalDate end = null;
+		Instant start = null;
+		Instant end = null;
 
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start = LocalDate.parse(stringDTSTART, formatter);
-			end = LocalDate.parse(stringDTEND, formatter);
+			start = Instant.parse(stringDTSTART.replace('/','-')+ "T16:22:52.966Z");
+			end = Instant.parse(stringDTEND.replace('/', '-') + "T16:22:52.966Z");
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
@@ -135,6 +136,8 @@ public class ConferenceReader {
 		DateTimeFormatter formatBefore = DateTimeFormatter.ofPattern("yyyyMMdd");
 		DateTimeFormatter formatAfter = DateTimeFormatter.ofPattern("dd/MM/yyy");
 		String dateformated = LocalDate.parse(date, formatBefore).format(formatAfter);
+
+
 		return dateformated;
 	}
 

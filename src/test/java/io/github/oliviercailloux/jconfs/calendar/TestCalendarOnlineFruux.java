@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -53,7 +54,7 @@ public class TestCalendarOnlineFruux {
 			assertEquals("Paris",conferenceFound.getCity());
 			assertEquals("France",conferenceFound.getCountry());
 			assertEquals("2019-07-01",conferenceFound.getStartDate().toString());
-			assertEquals("1.36",conferenceFound.getFeeRegistration().toString());
+			assertEquals("1.36",conferenceFound.getFeeRegistration()+"");
 		}
 		else {
 			fail(new NullPointerException());
@@ -87,23 +88,23 @@ public class TestCalendarOnlineFruux {
 		String city = "Paris";
 		String country = "France";
 		String endDate = "08/08/2019";
-		Double feeRegistration = 1.36;
+		double feeRegistration = 1.36;
 		String startDate = "06/08/2019";
 		String title = "Java formation";
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
-		LocalDate start_ = null;
-		LocalDate end_ = null;
+		Instant start_ = null;
+		Instant end_ = null;
 
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start_ = LocalDate.parse(startDate, formatter);
-			end_ = LocalDate.parse(endDate, formatter);
+			start_ = Instant.parse(startDate);
+			end_ = Instant.parse(endDate);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
 
 		Conference conference = new Conference(uid, url, title, start_, end_, feeRegistration, country, city);
-
+		
 		conferenceVEvent = instanceCalendarOnline.conferenceToVEvent(conference);
 
 		assertEquals(conferenceVEvent.getProperty(Property.SUMMARY).getValue(), conference.getTitle());
@@ -120,13 +121,13 @@ public class TestCalendarOnlineFruux {
 		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
 		userFruux.readFile();
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
-		LocalDate start_ = null;
-		LocalDate end_ = null;
+		Instant start_ = null;
+		Instant end_ = null;
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start_ = LocalDate.parse("06/08/2019", formatter);
-			end_ = LocalDate.parse("08/08/2019", formatter);
+			start_ = Instant.parse("2020-05-25T16:22:52.966Z");
+			end_ = Instant.parse("2020-07-25T16:22:52.966Z");
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}

@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -52,7 +53,7 @@ public class TestCalendarOnlineNextcloud {
 			assertEquals("Paris",conferenceFound.getCity());
 			assertEquals("France",conferenceFound.getCountry());
 			assertEquals("2020-04-28",conferenceFound.getStartDate().toString());
-			assertEquals("1.36",conferenceFound.getFeeRegistration().toString());
+			assertEquals("1.36",conferenceFound.getFeeRegistration()+"");
 		}
 		else {
 			fail(new NullPointerException());
@@ -83,17 +84,17 @@ public class TestCalendarOnlineNextcloud {
 		String city = "Paris";
 		String country = "France";
 		String endDate = "08/08/2019";
-		Double feeRegistration = 1.36;
+		double feeRegistration = 1.36;
 		String startDate = "06/08/2019";
 		String title = "Java formation";
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
-		LocalDate start = null;
-		LocalDate end = null;
+		Instant start = null;
+		Instant end = null;
 
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start = LocalDate.parse(startDate, formatter);
-			end = LocalDate.parse(endDate, formatter);
+			start = Instant.parse(startDate.replace('/','-')+ "T16:22:52.966Z");
+			end = Instant.parse(endDate.replace('/', '-') + "T16:22:52.966Z");
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
@@ -114,13 +115,13 @@ public class TestCalendarOnlineNextcloud {
 	public void testAddOnlineConference() throws Exception {
 		UserCredentials user=new UserCredentials();
 		user.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		LocalDate start = null;
-		LocalDate end = null;
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", user));		Instant start = null;
+		Instant end = null;
 		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start = LocalDate.parse("06/08/2019", formatter);
-			end = LocalDate.parse("08/08/2019", formatter);
+			start = Instant.parse("06/08/2019".replace('/','-')+ "T16:22:52.966Z");
+			end = Instant.parse("08/08/2019".replace('/', '-') + "T16:22:52.966Z");
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
