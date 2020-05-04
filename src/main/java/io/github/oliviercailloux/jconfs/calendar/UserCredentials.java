@@ -8,6 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
+import net.fortuna.ical4j.data.ParserException;
+
+/**
+ *  @author machria & zanis922
+ *  Class which handle a config file. Used to give credential to Calendar Builder.
+ */
+
 public class UserCredentials 
 {
 	private String username;
@@ -31,6 +38,13 @@ public class UserCredentials
 	public void setPath(String a) {
 		this.path=a;
 	}
+	/**
+	 * Parse a config file from source :
+	 * https://www.programcreek.com/java-api-examples/?api=net.fortuna.ical4j.model.property.Method
+	 * 
+	 * @throws IOException
+	 * @throws ParserException
+	 */
 	public void readFile() throws IOException {	  
 		
 		String a = "";
@@ -42,9 +56,10 @@ public class UserCredentials
 
 		}
 
-		this.username = a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length()-1);
-		this.password = a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length()-1);
-		this.calendarId = a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length()-1);
+		this.username = a.split("\n")[0].split("username = ")[1].substring(0, a.split("\n")[0].split("username = ")[1].length());
+		this.password = a.split("\n")[1].split("password = ")[1].substring(0, a.split("\n")[1].split("password = ")[1].length());
+		this.calendarId = a.split("\n")[2].split("calendarId = ")[1].substring(0, a.split("\n")[2].split("calendarId = ")[1].length());
+		
 	}
 
 

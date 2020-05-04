@@ -57,7 +57,7 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Url;
 
 /**
- *  @author machria & sbourg
+ *  @author machria & sbourg & zanis922
  *  Builder which create the connection with online calendar
  */
 public class CalendarBuilder {
@@ -73,6 +73,8 @@ public class CalendarBuilder {
 	protected String postUrl;
 	
 	public static CalendarBuilder given(String url, String postUrl, UserCredentials user) {
+		if(user.getUsername()==null||user.getPassword()==null||user.getCalendarId()==null)
+			throw new IllegalStateException("For UserCredential, you need to use readFiles.");
 		return new CalendarBuilder(url, user.getUsername(), user.getPassword(), user.getCalendarId(), postUrl) ;
 	}
 
@@ -99,33 +101,5 @@ public class CalendarBuilder {
 		collectionCalendarsOnline = new CalDAVCollection(this.postUrl+"/calendars/" + this.username + "/" + this.calendarId,
 				hostTarget, new CalDAV4JMethodFactory(), null);
 	}
-	
-	
-	public static void main(String args[]) throws CalDAV4JException, URISyntaxException, ParseException, InvalidConferenceFormatException, IOException {
-		UserCredentials userFruux = new UserCredentials();
-		userFruux.setPath("./src/main/resources/ConfigTestFruux.txt");
-		userFruux.readFile();
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("dav.fruux.com", "", userFruux));
-		LocalDate start_ = null;
-		LocalDate end_ = null;
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee68";
-		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			start_ = LocalDate.parse("06/08/2019", formatter);
-			end_ = LocalDate.parse("08/08/2019", formatter);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Date impossible to put in the conference", e);
-		}
-		Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation", start_, end_, 1.36,
-				"France", "Paris");
-		instanceCalendarOnline.addOnlineConference(conference);
-		Optional<Conference> confTest = instanceCalendarOnline.getConferenceFromUid(uid);
-		if(!confTest.isPresent()) {
-			fail();
-		}
-	}
-
-
-
 
 }
