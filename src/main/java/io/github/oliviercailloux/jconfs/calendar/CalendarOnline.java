@@ -63,7 +63,8 @@ import io.github.oliviercailloux.jconfs.conference.ConferenceReader;
 import io.github.oliviercailloux.jconfs.conference.InvalidConferenceFormatException;
 
 /**
- * @author nikola, machria & sbourg This class is the management of calendar
+ * @author nikola, machria & sbourg 
+ * 	This class is the management of calendar
  *         online object. It makes you able to add, edit and delete conference.
  */
 public class CalendarOnline {

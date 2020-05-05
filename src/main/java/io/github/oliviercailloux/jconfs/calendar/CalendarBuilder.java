@@ -1,6 +1,5 @@
 package io.github.oliviercailloux.jconfs.calendar;
 
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
