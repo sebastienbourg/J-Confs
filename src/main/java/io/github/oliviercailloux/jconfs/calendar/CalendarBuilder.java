@@ -55,8 +55,10 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Url;
 
 /**
- * @author machria & sbourg & zanis922 Builder which create the connection with
+ * Builder which create the connection with
  *         online calendar
+ * @author machria & sbourg & zanis922 
+ * 
  */
 public class CalendarBuilder {
 	protected String url;

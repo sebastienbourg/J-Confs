@@ -63,9 +63,10 @@ import io.github.oliviercailloux.jconfs.conference.ConferenceReader;
 import io.github.oliviercailloux.jconfs.conference.InvalidConferenceFormatException;
 
 /**
- * @author nikola, machria & sbourg 
- * 	This class is the management of calendar
+ * This class is the management of calendar
  *         online object. It makes you able to add, edit and delete conference.
+ * @author nikola, machria & sbourg 
+ *
  */
 public class CalendarOnline {
 
@@ -79,8 +80,7 @@ public class CalendarOnline {
 	 * This method has been partially taken from :
 	 * https://github.com/dedeibel/list-events-caldav4j-example/blob/master/src/test/java/benjaminpeter/name/ListCalendarTest.java
 	 * It allows you to retrieve events from calendars hosted on a fruux account
-	 * Maybe add a try catch in line 97 because if an event don't have an url in
-	 * vEvent it block the program.
+	 * 
 	 * 
 	 * @return
 	 * @throws CalDAV4JException

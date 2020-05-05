@@ -41,10 +41,11 @@ import com.github.caldav4j.exceptions.CalDAV4JException;
 import com.google.common.base.Strings;
 
 /**
- * @author nikola 
  * This class GUI uses to show a list of conferences of a
  *         searcher and with the possibility to edit it.
  *         It takes conferences from fruux
+ * @author nikola 
+ * 
  */
 public class GuiListConferences {
 

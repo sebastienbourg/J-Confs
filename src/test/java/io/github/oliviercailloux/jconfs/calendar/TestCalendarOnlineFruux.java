@@ -29,8 +29,9 @@ import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
 
 /**
- * @author machria & sbourg Unit tests for connect to a calendar on Fruux cloud
+ * Unit tests for connect to a calendar on Fruux cloud
  *         platform
+ * @author machria & sbourg 
  */
 
 public class TestCalendarOnlineFruux {

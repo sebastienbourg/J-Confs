@@ -11,9 +11,10 @@ import java.util.Scanner;
 import net.fortuna.ical4j.data.ParserException;
 
 /**
- * @author machria & zanis922 
  * Class which handle a config file. Used to give
  *         credential to Calendar Builder. Need to use the method readFile to be at the good state
+ * @author machria & zanis922 
+ * 
  */
 
 public class UserCredentials {
