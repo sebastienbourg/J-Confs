@@ -6,15 +6,13 @@ import java.math.BigDecimal;
 import com.locationiq.client.api.DirectionsApi;
 import java.util.Iterator;
 import java.util.List;
-import com.locationiq.client.Configuration;
-import com.locationiq.client.auth.*;
 import com.locationiq.client.model.*;
 
 /**
- * This class allows to calculate the distance and the
- * duration between two places defined by address (convert to lattitude, longitude).
- * It define the steps to go to the destination. The units are meter and second, and
- * the steps are a string
+ * This class allows to calculate the distance and the duration between two
+ * places defined by address (convert to lattitude, longitude). It define the
+ * steps to go to the destination. The units are meter and second, and the steps
+ * are a string
  * 
  * @author Anis HAMOUNI & Sébastien BOURG
  */
@@ -31,9 +29,10 @@ public class Direction {
 	 * 
 	 * static factory method to build a direction instance
 	 * 
-	 * @param dep string address, example : "13 Rue Cloche Percé, 75004 Paris"
-	 * @param arriv string address, example : "Avenue du général de gaulle, 92800 puteaux"
-	 *           
+	 * @param dep   string address, example : "13 Rue Cloche Percé, 75004 Paris"
+	 * @param arriv string address, example : "Avenue du général de gaulle, 92800
+	 *              puteaux"
+	 * 
 	 * @throws ApiException
 	 * 
 	 */
@@ -53,7 +52,7 @@ public class Direction {
 	}
 
 	/**
-	 * Return the duration in second 
+	 * Return the duration in second
 	 * 
 	 * @return duration
 	 */
@@ -62,7 +61,7 @@ public class Direction {
 	}
 
 	/**
-	 * Return the distance in meters 
+	 * Return the distance in meters
 	 * 
 	 * @return distance
 	 */
@@ -71,7 +70,7 @@ public class Direction {
 	}
 
 	/**
-	 * Return the departure address 
+	 * Return the departure address
 	 * 
 	 * @return addressDeparture
 	 */
@@ -80,7 +79,7 @@ public class Direction {
 	}
 
 	/**
-	 * Return the departure address 
+	 * Return the departure address
 	 * 
 	 * @return addressDeparture
 	 */
@@ -97,13 +96,11 @@ public class Direction {
 		return this.steps;
 	}
 
-
-
 	/**
-	 * This function takes a string and returns it with a line break
-	 * at each "intersections" word. It's use when we calculate the steps.
+	 * This function takes a string and returns it with a line break at each
+	 * "intersections" word. It's use when we calculate the steps.
 	 * 
-	 * @param s String 
+	 * @param s String
 	 * 
 	 */
 	private String indentedStringOnIntersect(String s) {
@@ -114,9 +111,10 @@ public class Direction {
 	}
 
 	/**
-	 * This function removes the geometry information in the steps
-	 * because it's not currently use.
-	 * @param s String 
+	 * This function removes the geometry information in the steps because it's not
+	 * currently use.
+	 * 
+	 * @param s String
 	 * 
 	 */
 	private String indentedStringGeometry(String s) {
@@ -128,8 +126,9 @@ public class Direction {
 	}
 
 	/**
-	 * This function takes a string and returns it with a line 
-	 *  break at each "out" word.
+	 * This function takes a string and returns it with a line break at each "out"
+	 * word.
+	 * 
 	 * @param s String
 	 *
 	 */
@@ -142,7 +141,8 @@ public class Direction {
 
 	/**
 	 * This function calculates the time and distance as well as the steps to move
-	 * between the two departure and arrival address converted to latitude and longitude
+	 * between the two departure and arrival address converted to latitude and
+	 * longitude
 	 * 
 	 * @throws ApiException
 	 */

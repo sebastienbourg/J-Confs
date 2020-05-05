@@ -205,10 +205,10 @@ public class TranslationAddress {
 	/**
 	 * 
 	 * This method allows to create the ArrayList adressInformations making a
-	 * precise or not address search. The ArrayList is filled according to the
-	 * different elements to find, that is to say that if for an imprecise search it
-	 * is possible to assign several addresses to it, all these addresses are
-	 * entered in the ArrayList.
+	 * precise or not address search (precise is better). The ArrayList is filled
+	 * according to the different elements to find, that is to say that if for an
+	 * imprecise search it is possible to assign several addresses to it, all these
+	 * addresses are entered in the ArrayList.
 	 * 
 	 * @param adresse
 	 * @throws ApiException
@@ -218,7 +218,7 @@ public class TranslationAddress {
 		if (address == "" || address == null || address.isEmpty()) {
 			throw new IllegalArgumentException("Address error");
 		}
-		ApiClient defaultClient = this.connexion();
+		ApiClient defaultClient = TranslationAddress.connexion();
 		AutocompleteApi api = new AutocompleteApi(defaultClient);
 		List<Object> tmp = api.autocomplete(address, 1, null, null, null, null, null, null);
 		Iterator<Object> i = tmp.iterator();
@@ -280,6 +280,7 @@ public class TranslationAddress {
 	 * This method display all address found by autocomplete and ask the user to
 	 * select the one of his choice. After the user has chosen all the unnecessary
 	 * addresses in the addressFound and addressInformations ArrayList are deleted.
+	 * If only one address is found interaction with the user does not take place
 	 */
 
 	public void addressProposal() {
