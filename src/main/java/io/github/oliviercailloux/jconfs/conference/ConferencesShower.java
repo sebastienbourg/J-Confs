@@ -78,7 +78,7 @@ public class ConferencesShower {
 	 * @throws InvalidConferenceFormatException
 	 */
 	public Set<Conference> searchConferenceInFile(String fileName)
-			throws IOException, ParserException, InvalidConferenceFormatException {
+			throws Exception {
 		Set<Conference> set = retriever.retrieve(Objects.requireNonNull(fileName));
 		return set;
 
@@ -95,12 +95,12 @@ public class ConferencesShower {
 	 * @throws ParseException
 	 * @throws InvalidConferenceFormatException
 	 */
-	public Set<Conference> allConferences() throws IOException, ParserException, InvalidConferenceFormatException {
+	public Set<Conference> allConferences() throws Exception {
 		return retriever.retrieve();
 	}
 
 	public Set<Conference> conferencesFiltredByDate()
-			throws InvalidConferenceFormatException, IOException, ParserException {
+			throws Exception {
 		LocalDate minDate;
 		LocalDate maxDate;
 		try (Scanner sc = new Scanner(System.in)) {

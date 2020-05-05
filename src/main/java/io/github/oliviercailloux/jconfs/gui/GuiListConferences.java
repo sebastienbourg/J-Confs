@@ -379,9 +379,9 @@ public class GuiListConferences {
 
 	/**
 	 * Call the method from CalendarOnline to push in fruux the new conference
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public void addConference() throws IOException {
+	public void addConference() throws Exception {
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		LocalDate localDateStart = LocalDate.of(dateStart.getYear(), dateStart.getMonth() + 1, dateStart.getDay());
 		LocalDate localDateEnd = LocalDate.of(dateEnd.getYear(), dateEnd.getMonth() + 1, dateEnd.getDay());
@@ -404,9 +404,9 @@ public class GuiListConferences {
 
 	/**
 	 * Call the method from CalendarOnline to delete in fruux a conference
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public void removeConference() throws IOException {
+	public void removeConference() throws Exception {
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		String uidDelete = listConferencesUser.get(listConferences.getSelectionIndex()).getUid();
 		try {

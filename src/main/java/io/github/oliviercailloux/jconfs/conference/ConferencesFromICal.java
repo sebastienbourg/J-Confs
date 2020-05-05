@@ -2,6 +2,7 @@ package io.github.oliviercailloux.jconfs.conference;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,7 +17,7 @@ import net.fortuna.ical4j.data.ParserException;
 public class ConferencesFromICal implements ConferencesRetriever {
 
 	@Override
-	public Set<Conference> retrieve() throws IOException, ParserException, InvalidConferenceFormatException {
+	public Set<Conference> retrieve() throws Exception {
 		String filePath = ConferencesFromICal.class.getClassLoader().getResource("icaldata").getFile();
 		File ressourcesDirectory = new File(filePath);
 		File[] fileList = ressourcesDirectory.listFiles();
@@ -33,7 +34,7 @@ public class ConferencesFromICal implements ConferencesRetriever {
 
 	@Override
 	public Set<Conference> retrieve(LocalDate minDate, LocalDate maxDate)
-			throws IOException, ParserException, InvalidConferenceFormatException {
+			throws Exception {
 		Set<Conference> setOfAllConf = retrieve();
 		Set<Conference> setOfConfFiltred = new LinkedHashSet<>();
 		for (Conference conf : setOfAllConf) {
@@ -46,7 +47,7 @@ public class ConferencesFromICal implements ConferencesRetriever {
 
 	@Override
 	public Set<Conference> retrieve(String fileName)
-			throws InvalidConferenceFormatException, IOException, ParserException {
+			throws Exception {
 		Preconditions.checkNotNull(fileName);
 		URL urlcalendar = ConferenceReader.class.getResource(fileName + ".ics");
 		try (FileReader reader = new FileReader(new File(urlcalendar.getFile()))) {

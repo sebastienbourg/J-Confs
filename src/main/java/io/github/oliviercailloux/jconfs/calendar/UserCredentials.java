@@ -11,8 +11,10 @@ import java.util.Scanner;
 import net.fortuna.ical4j.data.ParserException;
 
 /**
- * Class which handle a config file. Used to give
- *         credential to Calendar Builder. Need to use the method readFile to be at the good state
+ * Class which handle a config file. 
+ * Used to give credential to Calendar Builder. 
+ * Need to use the method readFile to be usable in CalendarBuilder.
+ * Please note that the calendarId is link to a credential in all calendar cloud web-host.
  * @author machria & zanis922 
  * 
  */
@@ -23,9 +25,9 @@ public class UserCredentials {
 	private String calendarId;
 	private String path;
 
-	public UserCredentials() throws IOException {
+	public UserCredentials() throws Exception {
 		this.path = "./src/main/resources/Config.txt";
-
+		readFile();
 	}
 
 	public String getUsername() {
@@ -45,13 +47,13 @@ public class UserCredentials {
 	}
 
 	/**
-	 * Parse a config file from source :
-	 * https://www.programcreek.com/java-api-examples/?api=net.fortuna.ical4j.model.property.Method
+	 * Parse a config file from source
 	 * 
 	 * @throws IOException
 	 * @throws ParserException
+	 * @throws ConfigFileError
 	 */
-	public void readFile() throws IOException {
+	public void readFile() throws Exception {
 
 		String file = "";
 		final Path infile = Path.of(this.path.toString());
@@ -60,11 +62,13 @@ public class UserCredentials {
 			file = Files.readString(infile);
 
 		}
-
-		this.username = file.split("\n")[0].split("username = ")[1];
-		this.password = file.split("\n")[1].split("password = ")[1];
-		this.calendarId = file.split("\n")[2].split("calendarId = ")[1];
-
+		try {
+			this.username = file.split("\n")[0].split("username = ")[1];
+			this.password = file.split("\n")[1].split("password = ")[1];
+			this.calendarId = file.split("\n")[2].split("calendarId = ")[1];
+		}catch(Exception e) {
+			throw new ConfigFileError();
+		}
 	}
 
 }

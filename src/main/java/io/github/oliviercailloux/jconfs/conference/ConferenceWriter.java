@@ -61,7 +61,7 @@ public class ConferenceWriter {
 	 * @throws InvalidConferenceFormatException
 	 */
 	public static void deleteConference(String calFile, Conference conference)
-			throws IOException, ParserException, URISyntaxException, InvalidConferenceFormatException {
+			throws Exception {
 		Objects.requireNonNull(calFile);
 		Objects.requireNonNull(conference);
 

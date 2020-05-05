@@ -86,7 +86,7 @@ public class CalendarOnline {
 	 * @throws CalDAV4JException
 	 * @throws InvalidConferenceFormatException
 	 */
-	public Set<Conference> getOnlineConferences() throws CalDAV4JException, InvalidConferenceFormatException {
+	public Set<Conference> getOnlineConferences() throws Exception {
 		GenerateQuery searchQuery = new GenerateQuery();
 		CalendarQuery calendarQuery = searchQuery.generate();
 		Set<Conference> listConferencesUser = new LinkedHashSet<>();
@@ -94,16 +94,13 @@ public class CalendarOnline {
 				.queryCalendars(this.connector.httpclient, calendarQuery);
 
 		for (Calendar calendar : calendarsResult) {
-			try {
 				ComponentList<VEvent> componentList = calendar.getComponents(Component.VEVENT);
 				Iterator<VEvent> eventIterator = componentList.iterator();
 				while (eventIterator.hasNext()) {
 					VEvent vEventFound = eventIterator.next();
 					listConferencesUser.add(ConferenceReader.createConference(vEventFound));
 				}
-			} catch (Exception e) {
-				System.out.println("Conference unreadable");
-			}
+			
 		}
 		return listConferencesUser;
 	}
@@ -183,7 +180,7 @@ public class CalendarOnline {
 	 * @throws InvalidConferenceFormatException
 	 */
 	public Optional<Conference> getConferenceFromUid(String uid)
-			throws CalDAV4JException, InvalidConferenceFormatException {
+			throws Exception {
 		VEvent vEventConferenceFound = null;
 		GenerateQuery searchQuery = new GenerateQuery();
 		searchQuery.setFilter("VEVENT : UID==" + uid);

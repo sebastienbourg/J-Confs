@@ -22,7 +22,7 @@ public class TestConferenceReader {
 	protected Set<Conference> setOfConf;
 
 	@Test
-	public void testLocalCalendar() throws IOException, ParserException, InvalidConferenceFormatException {
+	public void testLocalCalendar() throws Exception {
 		Confr = new ConferenceReader();
 		confI = new ConferencesFromICal();
 		setOfConf = new LinkedHashSet<>();

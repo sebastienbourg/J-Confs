@@ -57,18 +57,15 @@ public class ConferenceReader {
 	 * @throws ParserException
 	 * @throws NumberFormatException
 	 */
-	public static Conference createConference(Component confCompo) throws InvalidConferenceFormatException {
+	public static Conference createConference(Component confCompo) throws Exception {
 		Conference conf = null;
 		URL confURL;
 		String[] location;
 		String[] description;
 		Double feeRegistration = null;
 
-		try {
-			confURL = new URL(confCompo.getProperty("URL").getValue());
-		} catch (MalformedURLException e1) {
-			throw new InvalidConferenceFormatException("URL malformated, impossible to put in a conference", e1);
-		}
+		confURL = new URL(confCompo.getProperty("URL").getValue());
+		
 
 		location = confCompo.getProperty("LOCATION").getValue().split(",");
 		description = confCompo.getProperty("DESCRIPTION").getValue().split("/");
@@ -111,7 +108,7 @@ public class ConferenceReader {
 	 * @throws InvalidConferenceFormatException
 	 */
 	public static Set<Conference> readConferences(Reader reader)
-			throws InvalidConferenceFormatException, IOException, ParserException {
+			throws Exception {
 		CalendarBuilder builder = new CalendarBuilder();
 		Calendar calendar = builder.build(reader);
 		Set<Conference> listeconfuser = new LinkedHashSet<>();

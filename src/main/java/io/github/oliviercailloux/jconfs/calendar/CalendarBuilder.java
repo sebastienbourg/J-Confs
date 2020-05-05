@@ -73,26 +73,22 @@ public class CalendarBuilder {
 	protected String postUrl;
 
 	public static CalendarBuilder given(String url, String postUrl, UserCredentials user) {
-		if (user.getUsername() == null || user.getPassword() == null || user.getCalendarId() == null)
-			throw new IllegalStateException("For UserCredential, you need to use readFiles.");
-		return new CalendarBuilder(url, user.getUsername(), user.getPassword(), user.getCalendarId(), postUrl);
+		return new CalendarBuilder(url, postUrl, user);
 	}
 
 	/**
-	 * Constructor for a generic calendar object
+	 * 
+	 * This is a the private constructor
 	 * 
 	 * @param url
-	 * @param userName
-	 * @param password
-	 * @param calendarID
-	 * @param port
+	 * @param UserCredentials
 	 * @param postUrl
 	 */
-	private CalendarBuilder(String url, String userName, String password, String calendarID, String postUrl) {
+	private CalendarBuilder(String url, String postUrl, UserCredentials user) {
 		this.url = url;
-		this.username = userName;
-		this.password = password;
-		this.calendarId = calendarID;
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.calendarId = user.getCalendarId();
 		this.postUrl = postUrl;
 		this.credsProvider = new BasicCredentialsProvider();
 		credsProvider.setCredentials(new AuthScope(this.url, port),
