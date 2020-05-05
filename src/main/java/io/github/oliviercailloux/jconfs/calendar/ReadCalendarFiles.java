@@ -5,6 +5,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
@@ -107,7 +108,9 @@ public class ReadCalendarFiles {
 				throw new IllegalArgumentException("Date impossible to put in the conference", e);
 			}
 
-			conf = new Conference(null, confURL, title, start, end, feeRegistration, country, city);
+			conf = new Conference(null, confURL, title, start.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+					end.atStartOfDay(ZoneId.systemDefault()).toInstant(), feeRegistration, country, city);// cf
+																											// https://stackoverflow.com/questions/23215299/how-to-convert-a-localdate-to-an-instant
 
 		}
 		return conf;

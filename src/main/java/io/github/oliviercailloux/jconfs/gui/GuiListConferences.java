@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.swt.SWT;
@@ -41,10 +42,9 @@ import com.github.caldav4j.exceptions.CalDAV4JException;
 import com.google.common.base.Strings;
 
 /**
- * @author nikola 
- * This class GUI uses to show a list of conferences of a
- *         searcher and with the possibility to edit it.
- *         It takes conferences from fruux
+ * @author nikola This class GUI uses to show a list of conferences of a
+ *         searcher and with the possibility to edit it. It takes conferences
+ *         from fruux
  */
 public class GuiListConferences {
 
@@ -84,7 +84,7 @@ public class GuiListConferences {
 	 * 
 	 * @param display
 	 * @return the shell
-	 * @throws Exception 
+	 * @throws Exception
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 * @throws ParserException
@@ -125,7 +125,9 @@ public class GuiListConferences {
 	 */
 	public void getConferences() throws Exception {
 		try {
-			listConferencesUser = new ArrayList<>(new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials())).getOnlineConferences());
+			listConferencesUser = new ArrayList<>(new CalendarOnline(
+					CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()))
+							.getOnlineConferences());
 		} catch (CalDAV4JException e) {
 			throw new IllegalStateException(e);
 		}
@@ -209,8 +211,9 @@ public class GuiListConferences {
 			txtCoutry.setText(conferenceSelected.getCountry());
 			txtUrl.setText(conferenceSelected.getUrl().toString());
 			txtRegisFee.setText(conferenceSelected.getFeeRegistration().toString());
-			setDateofConferences(dateStart, conferenceSelected.getStartDate());
-			setDateofConferences(dateEnd, conferenceSelected.getEndDate());
+			setDateofConferences(dateStart,
+					LocalDate.ofInstant(conferenceSelected.getStartDate(), ZoneId.systemDefault()));
+			setDateofConferences(dateEnd, LocalDate.ofInstant(conferenceSelected.getEndDate(), ZoneId.systemDefault()));
 		}
 	}
 
@@ -220,7 +223,7 @@ public class GuiListConferences {
 	 * widget list is updates with new online conferences
 	 * 
 	 * @param e event that we catch
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void editConference(@SuppressWarnings("unused") Event e) throws Exception {
 		if (isAllFieldsValid()) {
@@ -240,7 +243,8 @@ public class GuiListConferences {
 
 	/**
 	 * Create widgets of the GUI, and disposition of widgets
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 * 
 	 * @throws IOException
 	 * @throws ParserException
@@ -317,7 +321,7 @@ public class GuiListConferences {
 	/**
 	 * Create all listener for all widgets of the GUI
 	 */
-	private void createListenerWidgets() throws Exception{
+	private void createListenerWidgets() throws Exception {
 		txtCity.addVerifyListener(ListenerAction::checkTextInput);
 		txtCoutry.addVerifyListener(ListenerAction::checkTextInput);
 		txtRegisFee.addVerifyListener(ListenerAction::checkDoubleInput);
@@ -347,7 +351,7 @@ public class GuiListConferences {
 	 * Delete the conference in fruux that had been selected by the user
 	 * 
 	 * @param e vent that we catch
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void deleteConference(@SuppressWarnings("unused") Event e) throws Exception {
 		if (listConferences.getSelectionIndex() >= 0) {
@@ -378,10 +382,12 @@ public class GuiListConferences {
 
 	/**
 	 * Call the method from CalendarOnline to push in fruux the new conference
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public void addConference() throws IOException {
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		LocalDate localDateStart = LocalDate.of(dateStart.getYear(), dateStart.getMonth() + 1, dateStart.getDay());
 		LocalDate localDateEnd = LocalDate.of(dateEnd.getYear(), dateEnd.getMonth() + 1, dateEnd.getDay());
 		URL urlConference;
@@ -392,8 +398,10 @@ public class GuiListConferences {
 		}
 
 		Conference newConference = new Conference(new RandomUidGenerator().generateUid().getValue(), urlConference,
-				txtTitle.getText(), localDateStart, localDateEnd, Doubles.tryParse(txtRegisFee.getText()),
-				txtCoutry.getText(), txtCity.getText());
+				txtTitle.getText(), localDateStart.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				localDateEnd.atStartOfDay(ZoneId.systemDefault()).toInstant(), Doubles.tryParse(txtRegisFee.getText()),
+				txtCoutry.getText(), txtCity.getText());// cf
+														// https://stackoverflow.com/questions/23215299/how-to-convert-a-localdate-to-an-instant
 		try {
 			instanceCalendarOnline.addOnlineConference(newConference);
 		} catch (CalDAV4JException | URISyntaxException | ParseException e) {
@@ -403,10 +411,12 @@ public class GuiListConferences {
 
 	/**
 	 * Call the method from CalendarOnline to delete in fruux a conference
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public void removeConference() throws IOException {
-		CalendarOnline instanceCalendarOnline = new CalendarOnline(CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
+		CalendarOnline instanceCalendarOnline = new CalendarOnline(
+				CalendarBuilder.given("ppp.woelkli.com", "/remote.php/dav", new UserCredentials()));
 		String uidDelete = listConferencesUser.get(listConferences.getSelectionIndex()).getUid();
 		try {
 			instanceCalendarOnline.deleteOnlineConference(uidDelete);

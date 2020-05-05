@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Optional;
@@ -52,7 +53,7 @@ public class TestCalendarOnlineFruux {
 			assertEquals(uidSearch, conferenceFound.getUid());
 			assertEquals("Paris", conferenceFound.getCity());
 			assertEquals("France", conferenceFound.getCountry());
-			assertEquals("2019-07-01", conferenceFound.getStartDate().toString());
+			assertEquals("2019-06-30", conferenceFound.getStartDate().toString().substring(0, 10));
 			assertEquals("1.36", conferenceFound.getFeeRegistration().toString());
 		} else {
 			fail(new NullPointerException());
@@ -102,7 +103,9 @@ public class TestCalendarOnlineFruux {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
 
-		Conference conference = new Conference(uid, url, title, start_, end_, feeRegistration, country, city);
+		Conference conference = new Conference(uid, url, title, start_.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				end_.atStartOfDay(ZoneId.systemDefault()).toInstant(), feeRegistration, country, city);// cf
+																										// https://stackoverflow.com/questions/23215299/how-to-convert-a-localdate-to-an-instant
 
 		conferenceVEvent = instanceCalendarOnline.conferenceToVEvent(conference);
 
@@ -131,8 +134,10 @@ public class TestCalendarOnlineFruux {
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
-		Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation", start_, end_, 1.36,
-				"France", "Paris");
+		Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation",
+				start_.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				end_.atStartOfDay(ZoneId.systemDefault()).toInstant(), 1.36, "France", "Paris");// cf
+																								// https://stackoverflow.com/questions/23215299/how-to-convert-a-localdate-to-an-instant
 		instanceCalendarOnline.addOnlineConference(conference);
 		Optional<Conference> confTest = instanceCalendarOnline.getConferenceFromUid(uid);
 		if (!confTest.isPresent()) {

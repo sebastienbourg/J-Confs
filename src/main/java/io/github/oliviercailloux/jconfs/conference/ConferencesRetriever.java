@@ -2,6 +2,7 @@ package io.github.oliviercailloux.jconfs.conference;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -25,18 +26,6 @@ public interface ConferencesRetriever {
 	public Set<Conference> retrieve() throws IOException, ParserException, InvalidConferenceFormatException;
 
 	/**
-	 * this method take a date interval and return a restricted set of conference
-	 * 
-	 * @param maxDate not <code> null</code>
-	 * @param minDate Not <code> null</code>
-	 * @return Set<Conference>,Not <code> null</code>, return empty set if no data
-	 *         found
-	 * @throws InvalidConferenceFormatException
-	 */
-	public Set<Conference> retrieve(LocalDate minDate, LocalDate maxDate)
-			throws IOException, ParserException, InvalidConferenceFormatException;
-
-	/**
 	 * this method search an .ics file located in classpath and return a set of
 	 * conferences contain in this file.
 	 * 
@@ -48,6 +37,18 @@ public interface ConferencesRetriever {
 	 */
 
 	public Set<Conference> retrieve(String fileName)
+			throws IOException, ParserException, InvalidConferenceFormatException;
+
+	/**
+	 * this method take a date interval and return a restricted set of conference
+	 * 
+	 * @param maxDate not <code> null</code>
+	 * @param minDate Not <code> null</code>
+	 * @return Set<Conference>,Not <code> null</code>, return empty set if no data
+	 *         found
+	 * @throws InvalidConferenceFormatException
+	 */
+	Set<Conference> retrieve(Instant minDate, Instant maxDate)
 			throws IOException, ParserException, InvalidConferenceFormatException;
 
 }

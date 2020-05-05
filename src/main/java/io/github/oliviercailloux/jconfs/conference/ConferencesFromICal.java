@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class ConferencesFromICal implements ConferencesRetriever {
 	}
 
 	@Override
-	public Set<Conference> retrieve(LocalDate minDate, LocalDate maxDate)
+	public Set<Conference> retrieve(Instant minDate, Instant maxDate)
 			throws IOException, ParserException, InvalidConferenceFormatException {
 		Set<Conference> setOfAllConf = retrieve();
 		Set<Conference> setOfConfFiltred = new LinkedHashSet<>();

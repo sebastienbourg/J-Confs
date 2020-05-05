@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class TestCalendarOnlineNextcloud {
 			assertEquals(uidSearch, conferenceFound.getUid());
 			assertEquals("Paris", conferenceFound.getCity());
 			assertEquals("France", conferenceFound.getCountry());
-			assertEquals("2020-04-28", conferenceFound.getStartDate().toString());
+			assertEquals("2020-04-27", conferenceFound.getStartDate().toString().substring(0, 10));
 			assertEquals("1.36", conferenceFound.getFeeRegistration().toString());
 		} else {
 			fail(new NullPointerException());
@@ -98,7 +99,8 @@ public class TestCalendarOnlineNextcloud {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
 
-		Conference conference = new Conference(uid, url, title, start, end, feeRegistration, country, city);
+		Conference conference = new Conference(uid, url, title, start.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				end.atStartOfDay(ZoneId.systemDefault()).toInstant(), feeRegistration, country, city);
 
 		conferenceVEvent = instanceCalendarOnline.conferenceToVEvent(conference);
 
@@ -126,8 +128,10 @@ public class TestCalendarOnlineNextcloud {
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
-		Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation", start, end, 1.36,
-				"France", "Paris");
+		Conference conference = new Conference(uid, new URL("http://fruux.com"), "Java formation",
+				start.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				end.atStartOfDay(ZoneId.systemDefault()).toInstant(), 1.36, "France", "Paris");// cf
+																								// https://stackoverflow.com/questions/23215299/how-to-convert-a-localdate-to-an-instant
 		instanceCalendarOnline.addOnlineConference(conference);
 		Optional<Conference> confTest = instanceCalendarOnline.getConferenceFromUid(uid);
 		assertTrue(confTest.isPresent());

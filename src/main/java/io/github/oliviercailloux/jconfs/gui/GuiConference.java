@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.channels.IllegalSelectorException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -80,7 +81,7 @@ public class GuiConference {
 	private LocalDate end;
 	private Display display;
 
-	public void Gui(Display displayGui){
+	public void Gui(Display displayGui) {
 		this.display = displayGui;
 
 		// setup the SWT window
@@ -329,7 +330,9 @@ public class GuiConference {
 		String title = textTitle.getText();
 		start = dateFormat(dateStart);
 		end = dateFormat(dateEnd);
-		conf = new Conference(null, url, title, start, end, feeRegistration, country, city);
+		conf = new Conference(null, url, title, start.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				end.atStartOfDay(ZoneId.systemDefault()).toInstant(), feeRegistration, country, city);// cf
+																										// https://stackoverflow.com/questions/23215299/how-to-convert-a-localdate-to-an-instant
 
 		if (name.equals("generateOm") || name.equals("generateYs")) {
 			researcher = new Researcher(textSurname.getText(), textFirstname.getText());
@@ -416,6 +419,7 @@ public class GuiConference {
 
 	/**
 	 * Method that display a map with two location points on it
+	 * 
 	 * @param e event that we can catch
 	 */
 	public void displayMap(@SuppressWarnings("unused") Event e) {
@@ -426,13 +430,12 @@ public class GuiConference {
 			try {
 				mapGUI = new MapGUI("world.map", display,
 						new LatLong(path.getArrival().getLatitude(), path.getArrival().getLongitude()));
-				mapGUI.display();				
+				mapGUI.display();
 
 			} catch (NullPointerException | IllegalArgumentException | IOException e1) {
 				throw new IllegalStateException(e1);
-			}				
-		}
-		else {
+			}
+		} else {
 			LOGGER.debug("The field city must not be null");
 			MessageBox mb = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
 			mb.setText("Failed");
@@ -442,28 +445,31 @@ public class GuiConference {
 	}
 
 	/**
-	 * This method set informations of the city (which is the arrival point) for the instance
-	 * path
+	 * This method set informations of the city (which is the arrival point) for the
+	 * instance path
 	 * 
-	 * @param city
-	 *            not <code>null</code>.
-	 * @param path
-	 *            not <code>null</code>.
-	 * @return 
+	 * @param city not <code>null</code>.
+	 * @param path not <code>null</code>.
+	 * @return
 	 */
 	public static PathStep getLatLonCity(String city) {
-		/*for the moment we stay with the cities15000.txt file, some files provided on http://download.geonames.org/export/dump/
-		 * are unusable. The file with all the cities is far too large (more than 10 minutes of execution without result. 
-		 * Files such as the one with cities with more than 15000 inhabitants seem to be good but carefull with the names.
-		 * (For instance If you look for "Pekin" in french, you have to search "Beijing".*/
+		/*
+		 * for the moment we stay with the cities15000.txt file, some files provided on
+		 * http://download.geonames.org/export/dump/ are unusable. The file with all the
+		 * cities is far too large (more than 10 minutes of execution without result.
+		 * Files such as the one with cities with more than 15000 inhabitants seem to be
+		 * good but carefull with the names. (For instance If you look for "Pekin" in
+		 * french, you have to search "Beijing".
+		 */
 		URL resourceUrl = GuiConference.class.getResource("cities15000.txt");
-		/*the block "Store city" is taken from ReverseGeoCode.java and GeoName.java classes with a few modifications
-		on code to work. Credit :
-		Created by Daniel Glasson 
-		on 18/05/2014. Source:
-		https://github.com/AReallyGoodName/OfflineReverseGeocode*/
-		
-		//begining of the block Store city"
+		/*
+		 * the block "Store city" is taken from ReverseGeoCode.java and GeoName.java
+		 * classes with a few modifications on code to work. Credit : Created by Daniel
+		 * Glasson on 18/05/2014. Source:
+		 * https://github.com/AReallyGoodName/OfflineReverseGeocode
+		 */
+
+		// begining of the block Store city"
 		ArrayList<GeoPoint> arPlaceNames = new ArrayList<>();
 		// Read the geonames file in the directory
 		String str;
@@ -480,13 +486,13 @@ public class GuiConference {
 		} catch (IOException ex) {
 			throw new IllegalStateException(ex);
 		}
-		//End of the block Storecity
-		
+		// End of the block Storecity
+
 		PathStep path = null;
-		for (int i=0; i < arPlaceNames.size(); ++i) {
+		for (int i = 0; i < arPlaceNames.size(); ++i) {
 			if (arPlaceNames.get(i).getPointName().contains(city)) {
-				path = new PathStep(new GeoPoint(arPlaceNames.get(i).getPointName(),
-						arPlaceNames.get(i).getLatitude(),arPlaceNames.get(i).getLongitude()));
+				path = new PathStep(new GeoPoint(arPlaceNames.get(i).getPointName(), arPlaceNames.get(i).getLatitude(),
+						arPlaceNames.get(i).getLongitude()));
 			}
 		}
 		return path;

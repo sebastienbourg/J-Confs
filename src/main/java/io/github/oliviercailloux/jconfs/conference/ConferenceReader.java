@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashSet;
@@ -78,7 +79,7 @@ public class ConferenceReader {
 				feeRegistration = Double.parseDouble(ele.substring(ele.indexOf(":") + 1));
 			}
 		}
-		
+
 		String title = confCompo.getProperty("SUMMARY").getValue();
 		String city = location[0];
 		String country = location[1];
@@ -96,7 +97,8 @@ public class ConferenceReader {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
 
-		conf = new Conference(uid, confURL, title, start, end, feeRegistration, country, city);
+		conf = new Conference(uid, confURL, title, start.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+				end.atStartOfDay(ZoneId.systemDefault()).toInstant(), feeRegistration, country, city);
 		return conf;
 	}
 
