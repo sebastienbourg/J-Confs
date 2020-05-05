@@ -29,8 +29,10 @@ import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
 
 /**
- * @author machria & sbourg Unit tests for connect to a calendar on Nextcloud
+ * Unit tests for connect to a calendar on Nextcloud
  *         platform
+ * @author machria & sbourg 
+ * 
  */
 
 public class TestCalendarOnlineNextcloud {
