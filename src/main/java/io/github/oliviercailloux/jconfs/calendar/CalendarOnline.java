@@ -100,7 +100,6 @@ public class CalendarOnline {
 					VEvent vEventFound = eventIterator.next();
 					listConferencesUser.add(ConferenceReader.createConference(vEventFound));
 				}
-			
 		}
 		return listConferencesUser;
 	}

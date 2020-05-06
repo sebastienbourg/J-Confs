@@ -72,7 +72,8 @@ public class TestCalendarOnlineFruux {
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
 		while (iteratorConf.hasNext()) {
 			Conference conferenceOnline = iteratorConf.next();
-			System.out.println(conferenceOnline.toString());
+			if(conferenceOnline!=null)
+				System.out.println(conferenceOnline.toString());
 		}
 	}
 

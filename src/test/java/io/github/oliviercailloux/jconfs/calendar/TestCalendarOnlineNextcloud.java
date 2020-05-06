@@ -52,7 +52,7 @@ public class TestCalendarOnlineNextcloud {
 			assertEquals(uidSearch, conferenceFound.getUid());
 			assertEquals("Paris", conferenceFound.getCity());
 			assertEquals("France", conferenceFound.getCountry());
-			assertEquals("2020-04-28", conferenceFound.getStartDate().toString());
+			assertEquals("2019-08-06", conferenceFound.getStartDate().toString());
 			assertEquals("1.36", conferenceFound.getFeeRegistration().toString());
 		} else {
 			fail(new NullPointerException());
@@ -70,7 +70,8 @@ public class TestCalendarOnlineNextcloud {
 		Iterator<Conference> iteratorConf = collectionConferences.iterator();
 		while (iteratorConf.hasNext()) {
 			Conference conferenceOnline = iteratorConf.next();
-			System.out.println(conferenceOnline.toString());
+			if(conferenceOnline!=null)
+				System.out.println(conferenceOnline.toString());
 		}
 	}
 

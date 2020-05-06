@@ -63,12 +63,23 @@ public class ConferenceReader {
 		String[] location;
 		String[] description;
 		Double feeRegistration = null;
-
-		confURL = new URL(confCompo.getProperty("URL").getValue());
-		
-
-		location = confCompo.getProperty("LOCATION").getValue().split(",");
-		description = confCompo.getProperty("DESCRIPTION").getValue().split("/");
+		Property url = confCompo.getProperty("URL");
+		if(url!=null) {
+			String urlString = url.getValue();
+			confURL = new URL(urlString);
+		} else {
+			return null;
+		}
+		Property locationP = confCompo.getProperty("LOCATION");
+		Property descriptionP = confCompo.getProperty("DESCRIPTION");
+		if (locationP!=null)
+			location = confCompo.getProperty("LOCATION").getValue().split(",");
+		else
+			return null;
+		if(descriptionP!=null)
+			description = confCompo.getProperty("DESCRIPTION").getValue().split("/");
+		else
+			return null;
 
 		for (String ele : description) {
 			if (ele.contains("Fee")) {
