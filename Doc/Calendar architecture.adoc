@@ -3,14 +3,16 @@ Here you can find a class diagram :
 
 image:https://imgur.com/uwO9sFj.png[alt="Calendar class diagram",width=80%,height=80%, align="center"]
 
-CalendarOnline :
+*CalendarOnline :
 
 The main class which was alone at first. We removed the part which handle the connection that is now able on Calendar Builder.
 
-CalendarBuilder :
+*CalendarBuilder :
+
 This class handle only connection to the cloud server. We removed the part which read a file from a path on UserCredentials.
 
-UserCredentials :
+*UserCredentials :
+
 This class read from a specific path, information about the connection to the cloud server.
 
 Information to give to connect :
