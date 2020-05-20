@@ -15,7 +15,7 @@ This class handle only connection to the cloud server. We removed the part which
 
 This class read from a specific path, information about the connection to the cloud server.
 
-Information to give to connect :
+*Information to give to connect :*
 
 username (in file)
 
