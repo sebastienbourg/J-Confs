@@ -21,12 +21,15 @@ class DistanceDurationTests {
 	 */
 
 	@Test
-	void testGetDistanceDuration() throws ApiException {
+	void testGetDistanceDuration() throws ApiException, InterruptedException {
 		BigDecimal distance = new BigDecimal("11168.5");
 		BigDecimal duration = new BigDecimal("1048.9");
 		DistanceDuration result = DistanceDuration.newDistanceDuration("13 Rue Cloche Percé, 75004 Paris",
 				"15 Avenue du général de gaulle, 92800 puteaux");
-		
+		TimeUnit.SECONDS.sleep(2);
+		result.getDirection();
+		assertEquals(distance,result.getDistance());
+		assertEquals(duration,result.getDuration());
 
 	}
 }
