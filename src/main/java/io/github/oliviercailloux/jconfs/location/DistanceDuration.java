@@ -102,16 +102,19 @@ public class DistanceDuration {
 	public void getDirection() throws ApiException {
 
 		ApiClient defaultClient = TranslationAddress.connexion();
-
+		System.out.println("Check 1 ");
 		String latLonAddressDeparture = this.addressDeparture.getLongitude() + ","
 				+ this.addressDeparture.getLatitude();
+		System.out.println("Check 2");
 		String latLonAddressArrival = this.addressArrival.getLongitude() + "," + this.addressArrival.getLatitude();
-
+		System.out.println("Check 3");
 		DirectionsApi api = new DirectionsApi(defaultClient);
-
+		System.out.println("Check 4");
 		DirectionsDirections response = api.directions(latLonAddressDeparture + ";" + latLonAddressArrival, null, null,
 				null, null, null, null, "true", null, null, "simplified", null);
+		System.out.println("Check 5");
 		List<DirectionsDirectionsRoutes> routes = response.getRoutes();
+		System.out.println("Check 6");
 		Iterator<DirectionsDirectionsRoutes> ite = routes.iterator();
 		while (ite.hasNext()) {
 			DirectionsDirectionsRoutes oneDirection = ite.next();
