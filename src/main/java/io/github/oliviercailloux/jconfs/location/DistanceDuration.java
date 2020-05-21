@@ -7,6 +7,7 @@ import com.locationiq.client.api.DirectionsApi;
 import java.util.Iterator;
 import java.util.List;
 import com.locationiq.client.model.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class allows to calculate the distance and the duration between two
@@ -38,12 +39,13 @@ public class DistanceDuration {
 		return new DistanceDuration(dep, arriv);
 	}
 
-	private DistanceDuration(String dep, String arriv) throws ApiException {
+	private DistanceDuration(String dep, String arriv) throws ApiException, InterruptedException {
 		this.duration = this.distance = BigDecimal.ZERO;
 		this.steps = "";
 		this.addressDeparture = TranslationAddress.TranslationAddressBuilder.build().addressInformations(dep)
 				.addressFound().latitude().longitude().get();
 		System.out.println("Check departure");
+		TimeUnit.SECONDS.sleep(1);
 		this.addressArrival = TranslationAddress.TranslationAddressBuilder.build().addressInformations(arriv)
 				.addressFound().latitude().longitude().get();
 		System.out.println("Check arrival");
