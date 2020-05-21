@@ -43,8 +43,10 @@ public class DistanceDuration {
 		this.steps = "";
 		this.addressDeparture = TranslationAddress.TranslationAddressBuilder.build().addressInformations(dep)
 				.addressFound().latitude().longitude().get();
+		System.out.println("Check departure");
 		this.addressArrival = TranslationAddress.TranslationAddressBuilder.build().addressInformations(arriv)
 				.addressFound().latitude().longitude().get();
+		System.out.println("Check arrival");
 	}
 
 	/**
