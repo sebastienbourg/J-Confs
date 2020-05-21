@@ -35,7 +35,7 @@ public class DistanceDuration {
 	 * @throws ApiException
 	 * 
 	 */
-	public static DistanceDuration newDistanceDuration(String dep, String arriv) throws ApiException {
+	public static DistanceDuration newDistanceDuration(String dep, String arriv) throws ApiException, InterruptedException {
 		return new DistanceDuration(dep, arriv);
 	}
 
