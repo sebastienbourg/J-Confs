@@ -20,6 +20,9 @@ import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.XComponent;
 import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.DtEnd;
+import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Url;
@@ -92,9 +95,10 @@ public class ConferenceWriter {
 	 * @throws ParserException
 	 * @throws ValidationException
 	 * @throws URISyntaxException
+	 * @throws ParseException 
 	 */
 	public static void addConference(String calFile, Conference conference)
-			throws IOException, ParserException, ValidationException, URISyntaxException {
+			throws IOException, ParserException, ValidationException, URISyntaxException, ParseException {
 		Objects.requireNonNull(calFile);
 		Objects.requireNonNull(conference);
 
@@ -105,16 +109,16 @@ public class ConferenceWriter {
 		PropertyList<Property> propertyList = new PropertyList<>();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		propertyList.add(new XProperty("X-DTSTART", formatter.format(conference.getStartDate())));
-		propertyList.add(new XProperty("X-DTEND", formatter.format(conference.getStartDate())));
+		propertyList.add(new DtStart(formatter.format(conference.getStartDate())));
+		propertyList.add(new DtEnd(formatter.format(conference.getStartDate())));
 
 		propertyList.add(new Summary(conference.getTitle()));
 		propertyList.add(new XProperty("X-COUNTRY", conference.getCountry().toString()));
 		propertyList.add(new XProperty("X-CITY", conference.getCity().toString()));
 		propertyList.add(new Url(conference.getUrl().get().toURI()));
-		propertyList.add(new XProperty("X-FEE", conference.getFeeRegistration().toString()));
+		propertyList.add(new Description(conference.getFeeRegistration().toString()));
 
-		XComponent meeting = new XComponent("X-CONFERENCE", propertyList);
+		XComponent meeting = new XComponent("CONFERENCE", propertyList);
 		// add event to the calendar
 		calendar.getComponents().add(meeting);
 

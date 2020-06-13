@@ -7,6 +7,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.swt.SWT;
@@ -209,8 +210,8 @@ public class GuiListConferences {
 			txtCoutry.setText(conferenceSelected.getCountry().get());
 			txtUrl.setText(conferenceSelected.getUrl().toString());
 			txtRegisFee.setText(conferenceSelected.getFeeRegistration().toString());
-			setDateofConferences(dateStart, LocalDate.ofInstant(conferenceSelected.getStartDate(), ZoneId.systemDefault()) );
-			setDateofConferences(dateEnd, LocalDate.ofInstant(conferenceSelected.getEndDate(), ZoneId.systemDefault()));
+			setDateofConferences(dateStart, LocalDate.ofInstant(conferenceSelected.getStartDate(), ZoneOffset.UTC) );
+			setDateofConferences(dateEnd, LocalDate.ofInstant(conferenceSelected.getEndDate(), ZoneOffset.UTC));
 		}
 	}
 
@@ -391,7 +392,7 @@ public class GuiListConferences {
 		}
 		
 		ConferenceBuilder theBuild = new ConferenceBuilder();
-		Conference newConference = theBuild.setUid(new RandomUidGenerator().generateUid().getValue()).setUrl(urlConference).setTitle(txtTitle.getText()).setStartDate(localDateStart.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(localDateEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(Doubles.tryParse(txtRegisFee.getText())+"").setCity(txtCity.getText()).setCountry(txtCoutry.getText()).build();
+		Conference newConference = theBuild.setUid(new RandomUidGenerator().generateUid().getValue()).setUrl(urlConference).setTitle(txtTitle.getText()).setStartDate(localDateStart.atStartOfDay(ZoneOffset.UTC).toInstant()).setEndDate(localDateEnd.atStartOfDay(ZoneOffset.UTC).toInstant()).setRegistrationFee(Doubles.tryParse(txtRegisFee.getText()).intValue()).setCity(txtCity.getText()).setCountry(txtCoutry.getText()).build();
 				
 		try {
 			instanceCalendarOnline.addOnlineConference(newConference);

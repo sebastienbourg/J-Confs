@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import io.github.oliviercailloux.jconfs.calendar.ReadCalendarFiles;
 import io.github.oliviercailloux.jconfs.conference.Conference.ConferenceBuilder;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
@@ -55,16 +56,18 @@ public class ConferenceReader {
 	 *                  conference
 	 * @return a conference
 	 * @throws InvalidConferenceFormatException
+	 * @throws MalformedURLException 
 	 * @throws IOException
 	 * @throws ParserException
 	 * @throws NumberFormatException
 	 */
-	public static Conference createConference(Component confCompo) throws InvalidConferenceFormatException {
+	public static Conference createConference(Component confCompo) throws InvalidConferenceFormatException, MalformedURLException {
+		
 		Conference conf = null;
 		URL confURL;
 		String[] location;
 		String[] description;
-		String feeRegistration = null;
+		Integer feeRegistration = null;
 
 		try {
 			confURL = new URL(confCompo.getProperty("URL").getValue());
@@ -76,8 +79,7 @@ public class ConferenceReader {
 		description = confCompo.getProperty("DESCRIPTION").getValue().split("/");
 		for (String ele : description) {
 			if (ele.contains("Fee")) {
-				feeRegistration = ele.substring(ele.indexOf(":") + 1);
-				feeRegistration = feeRegistration.replace(" ", "");
+				feeRegistration = Double.parseDouble(ele.substring(ele.indexOf(":") + 1));
 			}
 		}
 		
@@ -98,7 +100,7 @@ public class ConferenceReader {
 			throw new IllegalArgumentException("Date impossible to put in the conference", e);
 		}
 		ConferenceBuilder theBuild = new ConferenceBuilder();
-		conf = theBuild.setUid(uid).setUrl(confURL).setTitle(title).setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration+"").setCity(city).setCountry(country).build();
+		conf = theBuild.setUid(uid).setUrl(confURL).setTitle(title).setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration.intValue()).setCity(city).setCountry(country).build();
 
 
 		return conf;

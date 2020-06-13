@@ -55,6 +55,7 @@ public class GenerateOMYS {
 			throws IOException, SAXException, ParserConfigurationException, IllegalArgumentException {
 		if (!fileDestination.isEmpty())
 			target = fileDestination;
+		conf.isConf();
 		ClassLoader classLoader = setCoordinates.class.getClassLoader();
 		String source = classLoader
 				.getResource("io/github/oliviercailloux/y2018/jconfs/demande_de_mission_jeune_chercheur.fodt")
@@ -89,15 +90,14 @@ public class GenerateOMYS {
 			if (span.item(i).getTextContent().contains("POLE")) {
 				span.item(i).setTextContent(user.getGroup());
 			}
-
 			if (span.item(i).getTextContent().contains("INTITULEMISSION")) {
 				span.item(i).setTextContent(conf.getTitle());
 			}
-
+			if(!((conf.getCity().isEmpty()) && (conf.getCity().isEmpty()))) {
 			if (span.item(i).getTextContent().contains("VILLE - PAYS")) {
 				span.item(i).setTextContent(conf.getCity() + " - " + conf.getCountry());
 			}
-
+			}
 			if (span.item(i).getTextContent().contains("DATE")) {
 				span.item(i).setTextContent(conf.getStartDate().toString());
 			}

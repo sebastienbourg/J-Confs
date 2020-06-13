@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -100,7 +101,12 @@ public class ConferencesShower {
 	public Set<Conference> allConferences() throws IOException, ParserException, InvalidConferenceFormatException {
 		return retriever.retrieve();
 	}
-
+	/**
+	 * This method is just taking date. The full date is generated at the start of the date from UTC.
+	 * 
+	 * @return Set<Conference> not <code>null</code>
+	 * 
+	 */
 	public Set<Conference> conferencesFiltredByDate()
 			throws InvalidConferenceFormatException, IOException, ParserException {
 		LocalDate minDate;
@@ -117,7 +123,7 @@ public class ConferencesShower {
 				throw new IllegalArgumentException("minDate must be before maxDate");
 
 		}
-		return retriever.retrieve(minDate.atStartOfDay(ZoneId.systemDefault()).toInstant(), maxDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		return retriever.retrieve(minDate.atStartOfDay(ZoneOffset.UTC).toInstant(), maxDate.atStartOfDay(ZoneOffset.UTC).toInstant());
 
 	}
 }

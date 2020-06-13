@@ -15,27 +15,28 @@ import java.util.Optional;
 import com.google.common.base.MoreObjects;
 
 import net.fortuna.ical4j.model.property.Url;
+import net.fortuna.ical4j.util.RandomUidGenerator;
 
 /**
  * @author huong,camille This class is immutable.
  *
  */
-public final class Conference {
+public class Conference {
 	private Optional<URL> url;
 	private String uid;
 	private String title;
 	private Instant startDate;
 	private Instant endDate;
-	private Optional<String> registrationFee;
+	private Optional<Integer> registrationFee;
 	private Optional<String> country;
 	private Optional<String> city;
 
 	/**
 	 * This is a constructor which initializes the conference object
 	 * 
-	 * @param uid	not <code>null</code>
+	 * @param uid             not <code>null</code>
 	 * @param url
-	 * @param title not <code>null</code>
+	 * @param title           not <code>null</code>
 	 * @param startDate       not <code>null</code>
 	 * @param endDate         not <code>null</code>
 	 * @param registrationFee
@@ -43,82 +44,57 @@ public final class Conference {
 	 * @param city
 	 */
 	private Conference() {
-		this.url=Optional.empty();
-		this.registrationFee=Optional.empty();
-		this.country=Optional.empty();
-		this.city=Optional.empty();
+		this.uid="";
+		this.url = Optional.empty();
+		this.registrationFee = Optional.empty();
+		this.country = Optional.empty();
+		this.city = Optional.empty();
 	}
 
-	/**
-	 * This is a getter which return the URL
-	 * 
-	 * @return url
-	 */
+	
 	public Optional<URL> getUrl() {
 		return url;
 	}
 
-	/**
-	 * This is a getter which return the title
-	 * 
-	 * @return title
-	 */
+	
 	public String getTitle() {
 		return title;
 	}
 
-	/**
-	 * This is a getter which return the date start
-	 * 
-	 * @return not <code>null</code>
-	 */
+	
 	public Instant getStartDate() {
 		return startDate;
 	}
 
-	/**
-	 * This is a getter which return the date end
-	 * 
-	 * @return not <code>null</code>
-	 */
+	
 	public Instant getEndDate() {
 		return endDate;
 	}
 
-	/**
-	 * This is a getter which return the fee of registration
-	 * 
-	 * @return registrationFee
-	 */
-	public Optional<String> getFeeRegistration() {
+	
+	public Optional<Integer> getFeeRegistration() {
 		return registrationFee;
 	}
 
-	/**
-	 * This is a getter which return the country
-	 * 
-	 * @return country
-	 */
+	
 	public Optional<String> getCountry() {
 		return country;
 	}
 
-	/**
-	 * This is a getter which return the city
-	 * 
-	 * @return city
-	 */
+	
 	public Optional<String> getCity() {
 		return city;
 	}
 
-	/**
-	 * This is a getter which return the iud
-	 * 
-	 * @return not <code>null</code>
-	 */
+	
 	public String getUid() {
 		return this.uid;
+	}
+	public boolean isConf() {
+		Preconditions.checkNotNull(this.title);
+		Preconditions.checkNotNull(this.startDate);
+		Preconditions.checkNotNull(this.endDate);
+		return true;
 	}
 
 	@Override
@@ -147,71 +123,81 @@ public final class Conference {
 				.add("startDate", startDate).add("endDate", endDate).add("registrationFee", registrationFee)
 				.add("country", country).add("city", city).toString();
 	}
-	
-	
-	
-	
-	
+
 	public static class ConferenceBuilder {
-        private Conference conferenceToBuild;
+		private Conference conferenceToBuild;
 
-        public ConferenceBuilder() {
-            conferenceToBuild = new Conference();
-        }
+		public ConferenceBuilder() {
+			conferenceToBuild = new Conference();
+		}
 
-        public Conference build() {
-            Conference builtConference = conferenceToBuild;
-            conferenceToBuild = new Conference();
-    		Preconditions.checkNotNull(builtConference.uid);
-    		Preconditions.checkNotNull(builtConference.title);
-    		Preconditions.checkNotNull(builtConference.startDate);
-    		Preconditions.checkNotNull(builtConference.endDate);
-            return builtConference;
-        }
+		public Conference build() {
+			Conference builtConference = conferenceToBuild;
+			conferenceToBuild = new Conference();
+			if(builtConference.uid.isEmpty())
+				builtConference.uid = new RandomUidGenerator().generateUid().getValue();
+			Preconditions.checkNotNull(builtConference.title);
+			Preconditions.checkNotNull(builtConference.startDate);
+			Preconditions.checkNotNull(builtConference.endDate);
+			return builtConference;
+		}
 
-        public ConferenceBuilder setUid(String uid) {
-            this.conferenceToBuild.uid = uid;
-            return this;
-        }
+		public ConferenceBuilder setUid(String uid) {
+			Preconditions.checkNotNull(uid);
+			this.conferenceToBuild.uid = uid;
+			return this;
+		}
 
-        public ConferenceBuilder setTitle(String title) {
-            this.conferenceToBuild.title = title;
-            return this;
-        }
-        
-        public ConferenceBuilder setStartDate(Instant startDate) {
-            this.conferenceToBuild.startDate = startDate;
-            return this;
-        }
-        
-        public ConferenceBuilder setEndDate(Instant endDate) {
-            this.conferenceToBuild.endDate = endDate;
-            return this;
-        }
-        
-        public ConferenceBuilder setRegistrationFee(String registrationFee) {
-            this.conferenceToBuild.registrationFee = Optional.ofNullable(registrationFee);
-            return this;
-        }
-        
-        public ConferenceBuilder setCountry(String country) {
-            this.conferenceToBuild.country = Optional.ofNullable(country);
-            return this;
-        }
-        
-        public ConferenceBuilder setCity(String city) {
-            this.conferenceToBuild.city = Optional.ofNullable(city);
-            return this;
-        }
-        
-        public ConferenceBuilder setUrl(URL url) {
-            this.conferenceToBuild.url = Optional.ofNullable(url);
-            return this;
-        }
+		public ConferenceBuilder setTitle(String title) {
+			Preconditions.checkNotNull(title);
+			this.conferenceToBuild.title = title;
+			return this;
+		}
 
+		public ConferenceBuilder setStartDate(Instant startDate) {
+			Preconditions.checkNotNull(startDate);
+			this.conferenceToBuild.startDate = startDate;
+			return this;
+		}
+		/**
+		 * This method makes you able to change the end date.
+		 * It will fail if the start date is not set up by sending
+		 * @throws
+		 * NullPointerException - if the parameter is null or if the conference start date has not been set up yet.
+		 * @throws
+		 * IllegalStateException - if the endDate is before the start date
+		 */
+		public ConferenceBuilder setEndDate(Instant endDate) {
+			Preconditions.checkNotNull(endDate);
+			Preconditions.checkNotNull(this.conferenceToBuild.startDate);
+			if(this.conferenceToBuild.startDate.isBefore(endDate)) {
+				this.conferenceToBuild.endDate = endDate;
+				return this;
+			}
+			throw new IllegalStateException();
+			
+		}
 
-    }
+		public ConferenceBuilder setRegistrationFee(Integer registrationFee) {
+			this.conferenceToBuild.registrationFee = Optional.ofNullable(registrationFee);
+			return this;
+		}
 
-	
+		public ConferenceBuilder setCountry(String country) {
+			this.conferenceToBuild.country = Optional.ofNullable(country);
+			return this;
+		}
+
+		public ConferenceBuilder setCity(String city) {
+			this.conferenceToBuild.city = Optional.ofNullable(city);
+			return this;
+		}
+
+		public ConferenceBuilder setUrl(URL url) {
+			this.conferenceToBuild.url = Optional.ofNullable(url);
+			return this;
+		}
+
+	}
 
 }

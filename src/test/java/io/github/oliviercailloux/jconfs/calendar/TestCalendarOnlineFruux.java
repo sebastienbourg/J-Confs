@@ -50,8 +50,8 @@ public class TestCalendarOnlineFruux {
 			Conference conferenceFound = potentialConference.get();
 			assertEquals("Java presentation",conferenceFound.getTitle());
 			assertEquals(uidSearch,conferenceFound.getUid());
-			assertEquals("Paris",conferenceFound.getCity().get());
-			assertEquals("France",conferenceFound.getCountry().get());
+			assertEquals("Paris",conferenceFound.getCity());
+			assertEquals("France",conferenceFound.getCountry());
 			assertEquals("2019-07-01",conferenceFound.getStartDate().toString().substring(0, 10));
 			assertEquals("1.36",conferenceFound.getFeeRegistration().get());
 		}
@@ -97,7 +97,7 @@ public class TestCalendarOnlineFruux {
 		}
 
 		ConferenceBuilder theBuild = new ConferenceBuilder();
-		Conference conference = theBuild.setUid(uid).setUrl(url).setTitle(title).setStartDate(start_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration+"").setCity(city).setCountry(country).build();
+		Conference conference = theBuild.setUid(uid).setUrl(url).setTitle(title).setStartDate(start_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration.intValue()).setCity(city).setCountry(country).build();
 
 
 		conferenceVEvent = instanceCalendarOnline.conferenceToVEvent(conference);
@@ -115,7 +115,7 @@ public class TestCalendarOnlineFruux {
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("dav.fruux.com", "b3297431258", "jizbr5fuj9gi", "6e8c6372-eba5-43da-9eed-8e5413559c99", ""));
 		LocalDate start_ = null;
 		LocalDate end_ = null;
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee69";
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee34";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			start_ = LocalDate.parse("06/08/2019", formatter);
@@ -125,7 +125,7 @@ public class TestCalendarOnlineFruux {
 		}
 		
 		ConferenceBuilder theBuild = new ConferenceBuilder();
-		Conference conference = theBuild.setUid(uid).setUrl(new URL("http://fruux.com")).setTitle("Java formation").setStartDate(start_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(1.36+"").setCity("Paris").setCountry("France").build();
+		Conference conference = theBuild.setUid(uid).setUrl(new URL("http://fruux.com")).setTitle("Java formation").setStartDate(start_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end_.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(136).setCity("Paris").setCountry("France").build();
 		
 		
 		
@@ -138,7 +138,7 @@ public class TestCalendarOnlineFruux {
 
 	@Test
 	public void testDelete() throws Exception {
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee69";
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee34";
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("dav.fruux.com", "b3297431258", "jizbr5fuj9gi", "6e8c6372-eba5-43da-9eed-8e5413559c99", ""));
 		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());

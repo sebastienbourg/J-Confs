@@ -50,8 +50,8 @@ public class TestCalendarOnlineNextcloud {
 			Conference conferenceFound = potentialConference.get();
 			assertEquals("93",conferenceFound.getTitle());
 			assertEquals(uidSearch,conferenceFound.getUid());
-			assertEquals("Paris",conferenceFound.getCity().get());
-			assertEquals("France",conferenceFound.getCountry().get());
+			assertEquals("Paris",conferenceFound.getCity());
+			assertEquals("France",conferenceFound.getCountry());
 			assertEquals("2020-04-29",conferenceFound.getStartDate().toString().substring(0, 10));
 			assertEquals("1.36",conferenceFound.getFeeRegistration().get());
 		}
@@ -97,7 +97,7 @@ public class TestCalendarOnlineNextcloud {
 		}
 		
 		ConferenceBuilder theBuild = new ConferenceBuilder();
-		Conference conference = theBuild.setUid(uid).setUrl(url).setTitle(title).setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration+"").setCity(city).setCountry(country).build();
+		Conference conference = theBuild.setUid(uid).setUrl(url).setTitle(title).setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration.intValue()).setCity(city).setCountry(country).build();
 		
 
 		conferenceVEvent = instanceCalendarOnline.conferenceToVEvent(conference);
@@ -115,7 +115,7 @@ public class TestCalendarOnlineNextcloud {
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
 		LocalDate start = null;
 		LocalDate end = null;
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee34";
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			start = LocalDate.parse("06/08/2019", formatter);
@@ -126,7 +126,7 @@ public class TestCalendarOnlineNextcloud {
 		
 		
 		ConferenceBuilder theBuild = new ConferenceBuilder();
-		Conference conference = theBuild.setUid(uid).setUrl(new URL("http://fruux.com")).setTitle("Java formation").setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(1.36+"").setCity("Paris").setCountry("France").build();
+		Conference conference = theBuild.setUid(uid).setUrl(new URL("http://fruux.com")).setTitle("Java formation").setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(136).setCity("Paris").setCountry("France").build();
 		
 		
 		instanceCalendarOnline.addOnlineConference(conference);
@@ -136,7 +136,7 @@ public class TestCalendarOnlineNextcloud {
 
 	@Test
 	public void testDelete() throws Exception {
-		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee67";
+		String uid = "4e14d618-1d93-29a3-adb3-2c21dca5ee34";
 		CalendarOnline instanceCalendarOnline = new CalendarOnline(new CalDavCalendarGeneric("us.cloudamo.com", "sebastien.bourg@dauphine.eu", "600bec84476fb1", "b", "/remote.php/dav"));
 		instanceCalendarOnline.deleteOnlineConference(uid);
 		System.out.println(instanceCalendarOnline.getOnlineConferences());

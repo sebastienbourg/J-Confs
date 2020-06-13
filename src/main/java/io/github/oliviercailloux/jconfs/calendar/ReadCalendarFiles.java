@@ -1,13 +1,18 @@
 package io.github.oliviercailloux.jconfs.calendar;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 import io.github.oliviercailloux.jconfs.conference.Conference;
 import io.github.oliviercailloux.jconfs.conference.Conference.ConferenceBuilder;
@@ -16,7 +21,9 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.component.CalendarComponent;
+import net.fortuna.ical4j.model.property.Url;
 import net.fortuna.ical4j.util.RandomUidGenerator;
 
 /**
@@ -71,7 +78,8 @@ public class ReadCalendarFiles {
 
 	/**
 	 * Creates conference from ics file, function inspired by function
-	 * readCalendarFile
+	 * readCalendarFile. You cannot setup hours. It is by default the start of the
+	 * day from UTC location.
 	 * 
 	 * @param filepath
 	 * @return
@@ -81,7 +89,6 @@ public class ReadCalendarFiles {
 	 */
 
 	public static Conference createConference(String filepath) throws IOException, ParserException {
-		
 
 		Conference conf = null;
 		try (FileInputStream fin2 = new FileInputStream(filepath)) {
@@ -111,10 +118,12 @@ public class ReadCalendarFiles {
 				throw new IllegalArgumentException("Date impossible to put in the conference", e);
 			}
 			ConferenceBuilder theBuild = new ConferenceBuilder();
-			conf = theBuild.setUid(new RandomUidGenerator().generateUid().getValue()).setUrl(confURL).setTitle(title).setStartDate(start.atStartOfDay(ZoneId.systemDefault()).toInstant()).setEndDate(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).setRegistrationFee(feeRegistration+"").setCity(city).setCountry(country).build();
+			conf = theBuild.setUrl(confURL).setTitle(title).setStartDate(start.atStartOfDay(ZoneOffset.UTC).toInstant()).setEndDate(end.atStartOfDay(ZoneOffset.UTC).toInstant()).setRegistrationFee(feeRegistration.intValue()).setCity(city).setCountry(country).build();
 
 		}
 		return conf;
 
 	}
+
+	
 }
