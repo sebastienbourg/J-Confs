@@ -148,7 +148,7 @@ public class CalendarOnline {
 				description = new Description("Fee:" + conferenceEdited.getFeeRegistration().get());
 				propertyListVevent.add(description);
 			}
-			if (!((conferenceEdited.getCity().isEmpty()) && (conferenceEdited.getCountry().isEmpty()))) {
+			if (!(conferenceEdited.getCity().isEmpty()) && !(conferenceEdited.getCountry().isEmpty())) {
 				location = new Location(conferenceEdited.getCity() + "," + conferenceEdited.getCountry());
 				propertyListVevent.add(location);
 			}
@@ -164,7 +164,7 @@ public class CalendarOnline {
 			propertyListVevent.add(startDate);
 			propertyListVevent.add(endDate);
 			propertyListVevent.add(name);
-			if (!((conferenceEdited.getCity().isEmpty()) && (conferenceEdited.getCountry().isEmpty()))) {
+			if (!(conferenceEdited.getCity().isEmpty()) && !(conferenceEdited.getCountry().isEmpty())) {
 				location = new Location(conferenceEdited.getCity() + "," + conferenceEdited.getCountry());
 				propertyListVevent.add(location);
 			}
