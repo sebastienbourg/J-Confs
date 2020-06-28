@@ -118,11 +118,11 @@ public class AddressQuerier {
 	 */
 	public static ApiClient connexion() throws JsonIOException, JsonSyntaxException, FileNotFoundException {
 		List<String> login = AddressQuerier.connexionConfiguration();
-		ApiClient defaultClient = Configuration.getDefaultApiClient();
-		defaultClient.setBasePath(login.get(0));
-		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
+		ApiClient client = Configuration.getDefaultApiClient();
+		client.setBasePath(login.get(0));
+		ApiKeyAuth key = (ApiKeyAuth) client.getAuthentication("key");
 		key.setApiKey(login.get(1));
-		return defaultClient;
+		return client;
 	}
 
 	/**
@@ -148,11 +148,11 @@ public class AddressQuerier {
 			throw new NullPointerException("Address error");
 		}
 		if (this.clientConnexion == null) {
-			ApiClient defaultClient = AddressQuerier.connexion();
-			this.clientConnexion = defaultClient;
+			ApiClient client = AddressQuerier.connexion();
+			this.clientConnexion = client;
 		}
-		TimeUnit.SECONDS.sleep(1);
 		AutocompleteApi api = new AutocompleteApi(this.clientConnexion);
+		TimeUnit.SECONDS.sleep(1);
 		List<Object> tmp = api.autocomplete(address, 1, null, null, null, null, null, null);
 		Iterator<Object> i = tmp.iterator();
 		while (i.hasNext()) {
