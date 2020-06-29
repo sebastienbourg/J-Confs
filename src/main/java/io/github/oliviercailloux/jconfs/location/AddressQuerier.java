@@ -1,11 +1,19 @@
 package io.github.oliviercailloux.jconfs.location;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+
 import com.locationiq.client.api.*;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.locationiq.client.ApiClient;
 import com.locationiq.client.ApiException;
 import com.locationiq.client.Configuration;
@@ -33,8 +41,12 @@ public class AddressQuerier {
 	 * @param address
 	 * @throws ApiException
 	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public static AddressQuerier given(String address) throws ApiException, InterruptedException {
+	public static AddressQuerier given(String address)
+			throws ApiException, InterruptedException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		return new AddressQuerier(address);
 	}
 
@@ -46,8 +58,12 @@ public class AddressQuerier {
 	 * @param address
 	 * @throws ApiException
 	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	private AddressQuerier(String address) throws ApiException, InterruptedException {
+	private AddressQuerier(String address)
+			throws ApiException, InterruptedException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		this.requestAddressInformations(address);
 	}
 
@@ -71,16 +87,44 @@ public class AddressQuerier {
 	}
 
 	/**
+	 * This method recovery connection informations in Configuration.json file
+	 * 
+	 * @return login
+	 * @throws JsonIOException
+	 * @throws JsonSyntaxException
+	 * @throws FileNotFoundException
+	 */
+	public static List<String> connexionConfiguration()
+			throws JsonIOException, JsonSyntaxException, FileNotFoundException {
+		JsonObject json;
+		List<String> login = new ArrayList<String>();
+		try (JsonReader jr = Json.createReader(new FileReader("Configuration.json"))) {
+			json = jr.readObject();
+			String basePath = json.getString("basePath");
+			String key = json.getString("key");
+			System.out.println(basePath.toString());
+			System.out.println(key);
+			login.add(basePath);
+			login.add(key);
+		}
+		return login;
+	}
+
+	/**
 	 * This method allows connection to LocationIQ and its database.
 	 * 
 	 * @return ApiClient clientConnexion
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public static ApiClient connexion() {
-		ApiClient defaultClient = Configuration.getDefaultApiClient();
-		defaultClient.setBasePath("https://eu1.locationiq.com/v1");
-		ApiKeyAuth key = (ApiKeyAuth) defaultClient.getAuthentication("key");
-		key.setApiKey("d4b9a23eaef07d");
-		return defaultClient;
+	public static ApiClient connexion() throws JsonIOException, JsonSyntaxException, FileNotFoundException {
+		List<String> login = AddressQuerier.connexionConfiguration();
+		ApiClient client = Configuration.getDefaultApiClient();
+		client.setBasePath(login.get(0));
+		ApiKeyAuth key = (ApiKeyAuth) client.getAuthentication("key");
+		key.setApiKey(login.get(1));
+		return client;
 	}
 
 	/**
@@ -95,8 +139,12 @@ public class AddressQuerier {
 	 * @throws ApiException
 	 * @return adressInformations
 	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public List<Address> requestAddressInformations(String address) throws ApiException, InterruptedException {
+	public List<Address> requestAddressInformations(String address)
+			throws ApiException, InterruptedException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		this.addressInformations = new ArrayList<>();
 		if (address == "" || address == null || address.isEmpty()) {
 			throw new NullPointerException("Address error");

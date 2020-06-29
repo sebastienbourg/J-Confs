@@ -3,10 +3,13 @@ package io.github.oliviercailloux.jconfs.location;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.locationiq.client.ApiException;
 
 /**
@@ -24,10 +27,14 @@ class AddressQuerierTest {
 	 * 
 	 * @throws LocationIq.ApiException
 	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
 
 	@Test
-	public final void testRecoveryAddressInformations() throws ApiException, InterruptedException {
+	public final void testRecoveryAddressInformations()
+			throws ApiException, InterruptedException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		AddressQuerier t = AddressQuerier.given("Université paris dauphine");
 		TimeUnit.SECONDS.sleep(1);
 		boolean test = false;
@@ -47,10 +54,14 @@ class AddressQuerierTest {
 	 * 
 	 * @throws LocationIq.ApiException
 	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
 
 	@Test
-	public final void testRecoveryAddressFound() throws ApiException, InterruptedException {
+	public final void testRecoveryAddressFound()
+			throws ApiException, InterruptedException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		AddressQuerier t = AddressQuerier.given("Université paris dauphine");
 		TimeUnit.SECONDS.sleep(1);
 		boolean test = (t.getAddressFound().size() >= 2);
