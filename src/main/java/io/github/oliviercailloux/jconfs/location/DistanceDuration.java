@@ -1,9 +1,12 @@
 package io.github.oliviercailloux.jconfs.location;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.locationiq.client.ApiClient;
 import com.locationiq.client.ApiException;
 import com.locationiq.client.api.DirectionsApi;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,8 +54,11 @@ public class DistanceDuration {
 	 * 
 	 * @return duration
 	 * @throws ApiException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public int getDuration() throws ApiException {
+	public int getDuration() throws ApiException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		if (this.generalStep.getDuration() == -1)
 			calculateDistanceDuration();
 		return this.generalStep.getDuration();
@@ -63,8 +69,11 @@ public class DistanceDuration {
 	 * 
 	 * @return distance
 	 * @throws ApiException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public int getDistance() throws ApiException {
+	public int getDistance() throws ApiException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		if (this.generalStep.getDistance() == -1)
 			calculateDistanceDuration();
 		return this.generalStep.getDistance();
@@ -93,8 +102,11 @@ public class DistanceDuration {
 	 * 
 	 * @return allSteps
 	 * @throws ApiException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public List<Step> getAllSteps() throws ApiException {
+	public List<Step> getAllSteps() throws ApiException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		if (this.allSteps.isEmpty())
 			calculateDistanceDuration();
 
@@ -109,8 +121,11 @@ public class DistanceDuration {
 	 * 
 	 * @return generalStep
 	 * @throws ApiException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	public Step getGeneralStep() throws ApiException {
+	public Step getGeneralStep() throws ApiException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		if (this.generalStep.getDistance() == -1 || this.generalStep.getDuration() == -1)
 			calculateDistanceDuration();
 
@@ -123,8 +138,12 @@ public class DistanceDuration {
 	 * addresses of the class.
 	 * 
 	 * @throws ApiException
+	 * @throws FileNotFoundException
+	 * @throws JsonSyntaxException
+	 * @throws JsonIOException
 	 */
-	private void calculateDistanceDuration() throws ApiException {
+	private void calculateDistanceDuration()
+			throws ApiException, JsonIOException, JsonSyntaxException, FileNotFoundException {
 		String latLonAddressDeparture = this.generalStep.getDepartureAddress().getLongitude() + ","
 				+ this.generalStep.getDepartureAddress().getLatitude();
 		String latLonAddressArrival = this.generalStep.getArrivalAddress().getLongitude() + ","
